@@ -1,4 +1,4 @@
-package com.tavanhoaisung.example16;
+package com.tranbichlien.finalproject;
 
 import android.content.Context;
 import android.content.Intent;
@@ -98,7 +98,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         // Set click listener for Map button
         mapButton.setOnClickListener(v -> {
             try {
-                // Default coordinates for demonstration (can be replaced with actual shop location)
+                // Default coordinates for demonstration (can be replaced with actual shop
+                // location)
                 String mapUrl = "geo:10.7769,106.7009?q=Shop+Location"; // Example coordinates for Ho Chi Minh City
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl));
                 mapIntent.setPackage("com.google.android.apps.maps"); // Specify Google Maps app
@@ -128,10 +129,10 @@ public class ProductDetailActivity extends AppCompatActivity {
                 String price = productPrice.getText().toString();
 
                 // Create share message
-                String shareMessage = "Check out this product: " + name + 
-                                     " by " + brand + 
-                                     " for " + price + 
-                                     "\n\nShared from My Shopping App";
+                String shareMessage = "Check out this product: " + name +
+                        " by " + brand +
+                        " for " + price +
+                        "\n\nShared from My Shopping App";
 
                 // Add text to share
                 shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);

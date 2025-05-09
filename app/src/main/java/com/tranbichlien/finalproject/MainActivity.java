@@ -1,4 +1,4 @@
-package com.tavanhoaisung.example16;
+package com.tranbichlien.finalproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
 
     private static final String CHANNEL_ID = "mock_purchase_channel";
-    private static final long NOTIFICATION_INTERVAL = 30000; // 30 seconds
+    private static final long NOTIFICATION_INTERVAL = 60000; // 60 seconds
     private static final int PERMISSION_REQUEST_CODE = 123;
 
     private Handler notificationHandler;
@@ -161,14 +161,14 @@ public class MainActivity extends AppCompatActivity {
         Product randomProduct = sampleProducts.get(random.nextInt(sampleProducts.size()));
 
         // Create notification message
-        String notificationMessage = "Someone just bought " + randomProduct.getName() + 
-                                    " from " + randomProduct.getBrand() + 
-                                    " for " + randomProduct.getPrice() + "!";
+        String notificationMessage = "You have a new voucher about " +
+                randomProduct.getName() + " from " + randomProduct.getBrand() +
+                " worth " + randomProduct.getPrice() + "!";
 
         // Build the notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.img) // Using a placeholder icon
-                .setContentTitle("New Purchase!")
+                .setContentTitle("New Voucher!")
                 .setContentText(notificationMessage)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
@@ -189,11 +189,12 @@ public class MainActivity extends AppCompatActivity {
      * Checks if the app has notification permission and requests it if needed
      */
     private void checkNotificationPermission() {
-        // For Android 13 and higher, we need to request the POST_NOTIFICATIONS permission
+        // For Android 13 and higher, we need to request the POST_NOTIFICATIONS
+        // permission
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 // Request the permission
-                requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERMISSION_REQUEST_CODE);
+                requestPermissions(new String[] { Manifest.permission.POST_NOTIFICATIONS }, PERMISSION_REQUEST_CODE);
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.tavanhoaisung.example16;
+package com.tranbichlien.finalproject;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -24,13 +24,13 @@ public class AddressActivity extends AppCompatActivity {
 
         // Initialize views
         initViews();
-        
+
         // Set click listeners
         setupClickListeners();
-        
+
         // For demo purposes, show a toast message
         showToast("Address screen loaded");
-        
+
         // In a real app, you would load the addresses from a database or API
         // For now, we'll just show a message that there are no addresses
         emptyAddressesText.setVisibility(android.view.View.VISIBLE);
@@ -42,10 +42,10 @@ public class AddressActivity extends AppCompatActivity {
         addressesRecyclerView = findViewById(R.id.addresses_recycler_view);
         emptyAddressesText = findViewById(R.id.empty_addresses_text);
         addAddressButton = findViewById(R.id.add_address_button);
-        
+
         // Set up RecyclerView
         addressesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        
+
         // In a real app, you would set an adapter with actual address data
         // For now, we'll just leave it empty
     }
@@ -53,7 +53,7 @@ public class AddressActivity extends AppCompatActivity {
     private void setupClickListeners() {
         // Back button click listener
         backButton.setOnClickListener(v -> finish());
-        
+
         // Add address button click listener
         addAddressButton.setOnClickListener(v -> {
             // Show toast message for add address functionality
@@ -61,9 +61,10 @@ public class AddressActivity extends AppCompatActivity {
             // In a real app, you would navigate to an add address screen or show a dialog
         });
     }
-    
+
     /**
      * Helper method to show toast messages
+     * 
      * @param message The message to display
      */
     private void showToast(String message) {

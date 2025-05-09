@@ -1,4 +1,4 @@
-package com.tavanhoaisung.example16;
+package com.tranbichlien.finalproject;
 
 import android.content.Context;
 import android.content.Intent;

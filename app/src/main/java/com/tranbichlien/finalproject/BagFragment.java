@@ -1,4 +1,4 @@
-package com.tavanhoaisung.example16;
+package com.tranbichlien.finalproject;
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -22,7 +22,7 @@ public class BagFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bag, container, false);
 
         recyclerView = view.findViewById(R.id.bagRecyclerView); // Đảm bảo id là đúng

@@ -1,4 +1,4 @@
-package com.tavanhoaisung.example16;
+package com.tranbichlien.finalproject;
 
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -9,44 +9,41 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class OrdersActivity extends AppCompatActivity {
+public class CouponsActivity extends AppCompatActivity {
 
     private ImageView backButton;
-    private RecyclerView ordersRecyclerView;
-    private TextView emptyOrdersText;
+    private RecyclerView couponsRecyclerView;
+    private TextView emptyCouponsText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_orders);
+        setContentView(R.layout.activity_coupons);
 
         // Initialize views
         initViews();
-        
+
         // Set click listeners
         setupClickListeners();
-        
+
         // For demo purposes, show a toast message
-        showToast("Orders screen loaded");
-        
-        // In a real app, you would load the orders from a database or API
-        // For now, we'll just show a message that there are no orders
-        emptyOrdersText.setVisibility(android.view.View.VISIBLE);
-        ordersRecyclerView.setVisibility(android.view.View.GONE);
+        showToast("Coupons screen loaded");
+
+        // In a real app, you would load the coupons from a database or API
+        // For now, we'll just show a message that there are no coupons
+        emptyCouponsText.setVisibility(android.view.View.VISIBLE);
+        couponsRecyclerView.setVisibility(android.view.View.GONE);
     }
 
     private void initViews() {
         backButton = findViewById(R.id.back_button);
-        ordersRecyclerView = findViewById(R.id.orders_recycler_view);
-        emptyOrdersText = findViewById(R.id.empty_orders_text);
-        
+        couponsRecyclerView = findViewById(R.id.coupons_recycler_view);
+        emptyCouponsText = findViewById(R.id.empty_coupons_text);
+
         // Set up RecyclerView
-        ordersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        
-        // In a real app, you would set an adapter with actual order data
+        couponsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // In a real app, you would set an adapter with actual coupon data
         // For now, we'll just leave it empty
     }
 
@@ -54,9 +51,10 @@ public class OrdersActivity extends AppCompatActivity {
         // Back button click listener
         backButton.setOnClickListener(v -> finish());
     }
-    
+
     /**
      * Helper method to show toast messages
+     * 
      * @param message The message to display
      */
     private void showToast(String message) {

@@ -1,4 +1,4 @@
-package com.tavanhoaisung.example16;
+package com.tranbichlien.finalproject;
 
 /**
  * Model class representing a product category.
@@ -10,7 +10,7 @@ public class Category {
     /**
      * Constructor for Category
      * 
-     * @param name The name of the category
+     * @param name          The name of the category
      * @param imageResource The resource ID of the category image
      */
     public Category(String name, int imageResource) {

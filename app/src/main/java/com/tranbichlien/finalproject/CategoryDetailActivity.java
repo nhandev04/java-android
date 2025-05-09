@@ -1,4 +1,4 @@
-package com.tavanhoaisung.example16;
+package com.tranbichlien.finalproject;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,10 +18,10 @@ public class CategoryDetailActivity extends AppCompatActivity {
     private ImageView backButton;
     private TextView categoryTitleTextView;
     private RecyclerView productsRecyclerView;
-    
+
     // Constants for intent extras
-    public static final String EXTRA_CATEGORY_NAME = "category_name";
-    public static final String EXTRA_CATEGORY_IMAGE = "category_image";
+    public static final String EXTRA_CATEGORY_NAME="category_name";
+    public static final String EXTRA_CATEGORY_IMAGE="category_image";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,21 +30,21 @@ public class CategoryDetailActivity extends AppCompatActivity {
 
         // Initialize views
         initViews();
-        
+
         // Get data from intent
         Intent intent = getIntent();
         if (intent != null) {
             String categoryName = intent.getStringExtra(EXTRA_CATEGORY_NAME);
-            
+
             // Set category name as title
             if (categoryName != null) {
                 categoryTitleTextView.setText(categoryName);
-                
+
                 // Load products for this category
                 loadProductsForCategory(categoryName);
             }
         }
-        
+
         // Set click listeners
         setupClickListeners();
     }
@@ -53,20 +53,20 @@ public class CategoryDetailActivity extends AppCompatActivity {
         backButton = findViewById(R.id.back_button);
         categoryTitleTextView = findViewById(R.id.category_title);
         productsRecyclerView = findViewById(R.id.products_recycler_view);
-        
+
         // Set up RecyclerView with GridLayoutManager (2 columns)
         productsRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
     }
-    
+
     private void setupClickListeners() {
         // Back button click listener
         backButton.setOnClickListener(v -> finish());
     }
-    
+
     private void loadProductsForCategory(String categoryName) {
         // Create a list of products for the selected category
         ArrayList<Product> products = new ArrayList<>();
-        
+
         // Add sample products based on category
         if (categoryName.equals("Điện thoại")) {
             products.add(new Product("Apple", "iPhone 14 Pro Max", "25,000,000", 5.0f, R.drawable.iphone));
@@ -92,22 +92,23 @@ public class CategoryDetailActivity extends AppCompatActivity {
             // Default products if category is not recognized
             showToast("No products found for this category");
         }
-        
+
         // Set adapter if there are products
         if (!products.isEmpty()) {
             ProductAdapter productAdapter = new ProductAdapter(this, products);
             productsRecyclerView.setAdapter(productAdapter);
         }
     }
-    
+
     /**
      * Helper method to show toast messages
+     * 
      * @param message The message to display
      */
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
-    
+
     // Static method to create intent for this activity
     public static Intent newIntent(Context context, Category category) {
         Intent intent = new Intent(context, CategoryDetailActivity.class);

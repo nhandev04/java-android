@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.tavanhoaisung.example16"
+    namespace = "com.tranbichlien.finalproject"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.tavanhoaisung.example16"
+        applicationId = "com.tranbichlien.finalproject"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -55,4 +55,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
     implementation ("androidx.legacy:legacy-support-v4:1.0.0")
     implementation ("com.google.android.material:material:1.11.0")
+
+    implementation 'org.projectlombok:lombok:1.18.28'
+    annotationProcessor 'org.projectlombok:lombok:1.18.28'
 }

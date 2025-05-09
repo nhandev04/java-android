@@ -1,4 +1,4 @@
-package com.tavanhoaisung.example16;
+package com.tranbichlien.finalproject;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,7 +23,7 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         // Inflate layout file fragment_profile.xml
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
@@ -36,8 +36,8 @@ public class ProfileFragment extends Fragment {
         initViews(view);
 
         // Set sample data for profile
-        profileName.setText("Tạ Văn Hoài Sung");
-        profileEmail.setText("Hoaisung113@gmail.com");
+        profileName.setText("Trần Bích Liên");
+        profileEmail.setText("bichlienne@gmail.com");
 
         // Set click listeners for all sections
         setupClickListeners();
@@ -52,7 +52,8 @@ public class ProfileFragment extends Fragment {
         profileInfoSection = view.findViewById(R.id.linearLayout3);
 
         // Feature cards
-        // Note: The orders card doesn't have an ID in the layout, so we'll find its parent and use child indexing
+        // Note: The orders card doesn't have an ID in the layout, so we'll find its
+        // parent and use child indexing
         View ordersCardView = ((ViewGroup) view.findViewById(R.id.linearLayout4)).getChildAt(0);
         ordersCard = (CardView) ordersCardView;
 
@@ -121,6 +122,7 @@ public class ProfileFragment extends Fragment {
 
     /**
      * Helper method to show toast messages
+     * 
      * @param message The message to display
      */
     private void showToast(String message) {

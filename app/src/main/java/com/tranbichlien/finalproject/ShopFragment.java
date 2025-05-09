@@ -1,4 +1,4 @@
-package com.tavanhoaisung.example16;
+package com.tranbichlien.finalproject;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,7 +23,7 @@ public class ShopFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_shop, container, false);
     }
 
@@ -74,11 +74,11 @@ public class ShopFragment extends Fragment {
 
     private void setupProductsRecyclerView() {
         ArrayList<Product> products = new ArrayList<>();
-        products.add(new Product("Apple", "iPhone 14 Pro Max", "25,000,000",5.0f, R.drawable.iphone ));
-        products.add(new Product("Samsung", "Galaxy S23+", "20,000,000",5.0f, R.drawable.galaxy ));
+        products.add(new Product("Apple", "iPhone 14 Pro Max", "25,000,000", 5.0f, R.drawable.iphone));
+        products.add(new Product("Samsung", "Galaxy S23+", "20,000,000", 5.0f, R.drawable.galaxy));
         products.add(new Product("Apple", "iPhone 11", "10,000,000", 4.5f, R.drawable.iphone11));
         products.add(new Product("Samsung", "Galaxy S20", "15,000,000", 4.5f, R.drawable.galaxys20));
-        ProductAdapter productAdapter = new ProductAdapter(getContext(),products);
+        ProductAdapter productAdapter = new ProductAdapter(getContext(), products);
         productsRecView.setAdapter(productAdapter);
         productsRecView.setLayoutManager(new GridLayoutManager(getContext(), 2));
     }

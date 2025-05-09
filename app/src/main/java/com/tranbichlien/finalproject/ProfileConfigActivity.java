@@ -1,4 +1,4 @@
-package com.tavanhoaisung.example16;
+package com.tranbichlien.finalproject;
 
 import android.os.Bundle;
 import android.view.View;
@@ -22,7 +22,7 @@ public class ProfileConfigActivity extends AppCompatActivity {
 
         // Initialize views
         initViews();
-        
+
         // Set click listeners
         setupClickListeners();
     }
@@ -34,17 +34,17 @@ public class ProfileConfigActivity extends AppCompatActivity {
         phoneEditText = findViewById(R.id.phone_edit_text);
         saveButton = findViewById(R.id.save_button);
         changePasswordButton = findViewById(R.id.change_password_button);
-        
+
         // Set default values
-        nameEditText.setText("Tạ Văn Hoài Sung");
-        emailEditText.setText("Hoaisung113@gmail.com");
+        nameEditText.setText("Trần Bích Liên");
+        emailEditText.setText("bichlienne@gmail.com");
         phoneEditText.setText("+84 123 456 789");
     }
 
     private void setupClickListeners() {
         // Back button click listener
         backButton.setOnClickListener(v -> finish());
-        
+
         // Save button click listener
         saveButton.setOnClickListener(v -> {
             // Show toast message for save functionality
@@ -53,7 +53,7 @@ public class ProfileConfigActivity extends AppCompatActivity {
             // For now, just finish the activity
             finish();
         });
-        
+
         // Change password button click listener
         changePasswordButton.setOnClickListener(v -> {
             // Show toast message for change password functionality
@@ -61,9 +61,10 @@ public class ProfileConfigActivity extends AppCompatActivity {
             // In a real app, you would navigate to a change password screen
         });
     }
-    
+
     /**
      * Helper method to show toast messages
+     * 
      * @param message The message to display
      */
     private void showToast(String message) {

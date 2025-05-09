@@ -12,7 +12,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:id="@+id/main1"
-    tools:context="com.tavanhoaisung.example9.MainActivity">
+    tools:context="com.tranbichlien.finalproject.MainActivity">
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
