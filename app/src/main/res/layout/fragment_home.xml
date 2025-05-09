@@ -20,7 +20,7 @@
             android:layout_height="490dp"
             android:layout_marginTop="50dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/iphone"
+            android:src="@drawable/iphonex"
             app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Tiêu đề sản phẩm chính -->

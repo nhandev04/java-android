@@ -1,5 +1,7 @@
 package com.tranbichlien.finalproject;
 
+import com.bumptech.glide.Glide;
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -35,10 +37,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // Bind data to the ViewHolder
         Product product = products.get(position);
-        holder.productImage.setImageResource(product.getImageResId());
         holder.productName.setText(product.getName());
         holder.productBrand.setText(product.getBrand());
         holder.productPrice.setText(product.getPrice());
+
+        // Nếu là URL thì dùng Glide
+        if (product.getImageUrl() != null) {
+            Glide.with(holder.productImage.getContext())
+                    .load(product.getImageUrl())
+                    .into(holder.productImage);
+        } else {
+            // Nếu là Drawable resource thì dùng setImageResource
+            holder.productImage.setImageResource(product.getImageResource());
+        }
 
         // Set click listener to navigate to product detail
         holder.itemView.setOnClickListener(v -> {

@@ -1,15 +1,21 @@
 package com.tranbichlien.finalproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -18,6 +24,12 @@ public class HomeFragment extends Fragment {
         private RecyclerView newProductsRecycler, discountedProductsRecycler;
         private ArrayList<Product> newProducts, discountedProducts;
         private ProductAdapter newProductAdapter, discountedProductAdapter;
+
+        // Main product section UI elements
+        private ImageView mainProductImage;
+        private TextView mainProductTitle;
+        private Button buyNowButton;
+        private Product featuredProduct;
 
         @Nullable
         @Override
@@ -29,21 +41,42 @@ public class HomeFragment extends Fragment {
                 newProductsRecycler = view.findViewById(R.id.newProductsRecycler);
                 discountedProductsRecycler = view.findViewById(R.id.discountedProductsRecycler);
 
+                // Initialize main product section UI elements
+                mainProductImage = view.findViewById(R.id.mainProductImage);
+                mainProductTitle = view.findViewById(R.id.mainProductTitle);
+                buyNowButton = view.findViewById(R.id.buyNowButton);
+
+                // Create featured product for main product section
+                featuredProduct = new Product("iPhone 14", "Apple", "$999", 5.0f,
+                                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp");
+
+                // Set up main product section with featured product
+                mainProductTitle.setText(featuredProduct.getName());
+                Glide.with(requireContext())
+                        .load(featuredProduct.getImageUrl())
+                        .into(mainProductImage);
+
+                // Set click listener for Buy Now button
+                buyNowButton.setOnClickListener(v -> {
+                        Intent intent = ProductDetailActivity.newIntent(requireContext(), featuredProduct);
+                        startActivity(intent);
+                });
+
                 // Dữ liệu mẫu cho sản phẩm mới
                 newProducts = new ArrayList<>();
                 newProducts.add(new Product("iPhone 14", "Apple", "$999", 5.0f,
                                 "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
 
-                newProducts.add(new Product("iPhone 13 ProMax", "Apple", "$1999", 5.0f, R.drawable.iphone13));
+                newProducts.add(new Product("iPhone 13 ProMax", "Apple", "$1999", 5.0f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
 
-                newProducts.add(new Product("Galaxy ", "Samsung", "$796", 4.0f, R.drawable.galaxy));
-                newProducts.add(new Product("Galaxys20", "Samsung", "$1572", 4.0f, R.drawable.galaxys20));
+                newProducts.add(new Product("Galaxy ", "Samsung", "$796", 4.0f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+                newProducts.add(new Product("Galaxys20", "Samsung", "$1572", 4.0f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
                 // Dữ liệu mẫu cho sản phẩm giảm giá
                 discountedProducts = new ArrayList<>();
-                discountedProducts.add(new Product("iPhone 14", "Apple", "$799", 4.7f, R.drawable.iphone));
-                discountedProducts.add(new Product("iPhone 13", "Apple", "$1799", 4.7f, R.drawable.iphone13));
-                discountedProducts.add(new Product("Galaxy", "Samsung", "$600", 4.0f, R.drawable.galaxy));
-                discountedProducts.add(new Product("Galaxys20", "Samsung", "$1499", 4.0f, R.drawable.galaxys20));
+                discountedProducts.add(new Product("iPhone 14", "Apple", "$799", 4.7f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+                discountedProducts.add(new Product("iPhone 13", "Apple", "$1799", 4.7f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+                discountedProducts.add(new Product("Galaxy", "Samsung", "$600", 4.0f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+                discountedProducts.add(new Product("Galaxys20", "Samsung", "$1499", 4.0f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
                 // Cài đặt Adapter và LayoutManager cho RecyclerView
                 newProductAdapter = new ProductAdapter(getContext(), newProducts); // Tạo adapter riêng cho sản phẩm mới
                 newProductsRecycler

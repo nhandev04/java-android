@@ -125,11 +125,11 @@ public class MainActivity extends AppCompatActivity {
      */
     private void initSampleProducts() {
         sampleProducts = new ArrayList<>();
-        sampleProducts.add(new Product("iPhone 14", "Apple", "$999", 5.0f, R.drawable.iphone));
-        sampleProducts.add(new Product("iPhone 13 ProMax", "Apple", "$1999", 5.0f, R.drawable.iphone13));
-        sampleProducts.add(new Product("Galaxy S22", "Samsung", "$796", 4.0f, R.drawable.galaxy));
-        sampleProducts.add(new Product("Galaxy S20", "Samsung", "$1572", 4.0f, R.drawable.galaxys20));
-        sampleProducts.add(new Product("iPhone 13", "Apple", "$799", 4.7f, R.drawable.iphone13));
+        sampleProducts.add(new Product("iPhone 14", "Apple", "$999", 5.0f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+        sampleProducts.add(new Product("iPhone 13 ProMax", "Apple", "$1999", 5.0f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+        sampleProducts.add(new Product("Galaxy S22", "Samsung", "$796", 4.0f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+        sampleProducts.add(new Product("Galaxy S20", "Samsung", "$1572", 4.0f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+        sampleProducts.add(new Product("iPhone 13", "Apple", "$799", 4.7f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
     }
 
     /**

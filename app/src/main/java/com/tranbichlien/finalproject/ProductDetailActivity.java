@@ -4,16 +4,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ProductDetailActivity extends AppCompatActivity {
+    private static final String PHONE_NUMBER = "tel:0123456789";
+    private static final String FACEBOOK_APP_URL = "fb://page/your_page_id";
+    private static final String FACEBOOK_WEB_URL = "https://www.facebook.com";
+    private static final String DEFAULT_MAP_COORDINATES = "10.7769,106.7009";
+    private static final String GOOGLE_MAPS_PACKAGE = "com.google.android.apps.maps";
+
+    public static final String EXTRA_PRODUCT_NAME = "product_name";
+    public static final String EXTRA_PRODUCT_BRAND = "product_brand";
+    public static final String EXTRA_PRODUCT_PRICE = "product_price";
+    public static final String EXTRA_PRODUCT_RATING = "product_rating";
+    public static final String EXTRA_PRODUCT_IMAGE = "product_image";
+    public static final String EXTRA_PRODUCT_IMAGE_URL = "product_image_url";
 
     private ImageView productImage;
     private TextView productName, productBrand, productPrice;
@@ -22,130 +28,104 @@ public class ProductDetailActivity extends AppCompatActivity {
     private ImageButton callButton, facebookButton, mapButton, shareButton;
     private ImageView backButton;
 
-    // Constants for intent extras
-    public static final String EXTRA_PRODUCT_NAME = "product_name";
-    public static final String EXTRA_PRODUCT_BRAND = "product_brand";
-    public static final String EXTRA_PRODUCT_PRICE = "product_price";
-    public static final String EXTRA_PRODUCT_RATING = "product_rating";
-    public static final String EXTRA_PRODUCT_IMAGE = "product_image";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
 
-        // Initialize views
         initViews();
+        processIntentData(getIntent());
+        setupClickListeners();
+    }
 
-        // Get data from intent
-        Intent intent = getIntent();
-        if (intent != null) {
-            String name = intent.getStringExtra(EXTRA_PRODUCT_NAME);
-            String brand = intent.getStringExtra(EXTRA_PRODUCT_BRAND);
-            String price = intent.getStringExtra(EXTRA_PRODUCT_PRICE);
-            float rating = intent.getFloatExtra(EXTRA_PRODUCT_RATING, 0.0f);
-            int imageResId = intent.getIntExtra(EXTRA_PRODUCT_IMAGE, R.drawable.img); // Default image
+    private void processIntentData(Intent intent) {
+        if (intent == null) return;
 
-            // Set data to views
-            productName.setText(name);
-            productBrand.setText(brand);
-            productPrice.setText(price);
-            productRating.setRating(rating);
+        String name = intent.getStringExtra(EXTRA_PRODUCT_NAME);
+        String brand = intent.getStringExtra(EXTRA_PRODUCT_BRAND);
+        String price = intent.getStringExtra(EXTRA_PRODUCT_PRICE);
+        float rating = intent.getFloatExtra(EXTRA_PRODUCT_RATING, 0.0f);
+        String imageUrl = intent.getStringExtra(EXTRA_PRODUCT_IMAGE_URL);
+        int imageResId = intent.getIntExtra(EXTRA_PRODUCT_IMAGE, R.drawable.img);
+
+        updateUIWithProductData(name, brand, price, rating, imageUrl, imageResId);
+    }
+
+    private void updateUIWithProductData(String name, String brand, String price,
+                                       float rating, String imageUrl, int imageResId) {
+        productName.setText(name);
+        productBrand.setText(brand);
+        productPrice.setText(price);
+        productRating.setRating(rating);
+
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            com.bumptech.glide.Glide.with(this)
+                .load(imageUrl)
+                .into(productImage);
+        } else {
             productImage.setImageResource(imageResId);
         }
+    }
 
-        // Set click listeners
-        backButton.setOnClickListener(v -> {
-            finish();
-        });
+    private void setupClickListeners() {
+        backButton.setOnClickListener(v -> finish());
+        addToCartButton.setOnClickListener(v -> finish());
+        callButton.setOnClickListener(v -> handleCallButton());
+        facebookButton.setOnClickListener(v -> handleFacebookButton());
+        mapButton.setOnClickListener(v -> handleMapButton());
+        shareButton.setOnClickListener(v -> handleShareButton());
+    }
 
-        addToCartButton.setOnClickListener(v -> {
-            // Add to cart functionality would go here
-            // For now, just finish the activity
-            finish();
-        });
+    private void handleCallButton() {
+        try {
+            startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse(PHONE_NUMBER)));
+        } catch (Exception e) {
+            showToast("Could not open dialer");
+        }
+    }
 
-        // Set click listener for Call button
-        callButton.setOnClickListener(v -> {
+    private void handleFacebookButton() {
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(FACEBOOK_APP_URL)));
+        } catch (Exception e) {
             try {
-                Intent dialIntent = new Intent(Intent.ACTION_DIAL);
-                dialIntent.setData(Uri.parse("tel:0123456789"));
-                startActivity(dialIntent);
-            } catch (Exception e) {
-                Toast.makeText(this, "Could not open dialer", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(FACEBOOK_WEB_URL)));
+            } catch (Exception ex) {
+                showToast("Could not open Facebook");
             }
-        });
+        }
+    }
 
-        // Set click listener for Facebook button
-        facebookButton.setOnClickListener(v -> {
-            try {
-                // Try to open Facebook app
-                String facebookUrl = "fb://page/your_page_id"; // Replace with actual page ID if available
-                Intent facebookIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(facebookUrl));
-                startActivity(facebookIntent);
-            } catch (Exception e) {
-                // If Facebook app is not installed, open in browser
-                try {
-                    String facebookWebUrl = "https://www.facebook.com"; // Replace with actual page URL if available
-                    Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(facebookWebUrl));
-                    startActivity(webIntent);
-                } catch (Exception ex) {
-                    Toast.makeText(this, "Could not open Facebook", Toast.LENGTH_SHORT).show();
-                }
+    private void handleMapButton() {
+        try {
+            String mapUrl = "geo:" + DEFAULT_MAP_COORDINATES + "?q=Shop+Location";
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl));
+            mapIntent.setPackage(GOOGLE_MAPS_PACKAGE);
+
+            if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(mapIntent);
+            } else {
+                String mapWebUrl = "https://maps.google.com/?q=" + DEFAULT_MAP_COORDINATES;
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mapWebUrl)));
             }
-        });
+        } catch (Exception e) {
+            showToast("Could not open maps");
+        }
+    }
 
-        // Set click listener for Map button
-        mapButton.setOnClickListener(v -> {
-            try {
-                // Default coordinates for demonstration (can be replaced with actual shop
-                // location)
-                String mapUrl = "geo:10.7769,106.7009?q=Shop+Location"; // Example coordinates for Ho Chi Minh City
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mapUrl));
-                mapIntent.setPackage("com.google.android.apps.maps"); // Specify Google Maps app
-                if (mapIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(mapIntent);
-                } else {
-                    // If Google Maps is not installed, open in browser
-                    String mapWebUrl = "https://maps.google.com/?q=10.7769,106.7009"; // Example coordinates
-                    Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mapWebUrl));
-                    startActivity(webIntent);
-                }
-            } catch (Exception e) {
-                Toast.makeText(this, "Could not open maps", Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void handleShareButton() {
+        ProductSharer sharer = new ProductSharer(productName.getText().toString(),
+                                               productBrand.getText().toString(),
+                                               productPrice.getText().toString());
+        try {
+            startActivity(sharer.createShareIntent());
+        } catch (Exception e) {
+            showToast("Could not share product");
+        }
+    }
 
-        // Set click listener for Share button
-        shareButton.setOnClickListener(v -> {
-            try {
-                // Create share intent
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-
-                // Get product details to share
-                String name = productName.getText().toString();
-                String brand = productBrand.getText().toString();
-                String price = productPrice.getText().toString();
-
-                // Create share message
-                String shareMessage = "Check out this product: " + name +
-                        " by " + brand +
-                        " for " + price +
-                        "\n\nShared from My Shopping App";
-
-                // Add text to share
-                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
-
-                // Create chooser dialog
-                Intent chooser = Intent.createChooser(shareIntent, "Share Product via");
-
-                // Start the activity
-                startActivity(chooser);
-            } catch (Exception e) {
-                Toast.makeText(this, "Could not share product", Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     private void initViews() {
@@ -156,22 +136,48 @@ public class ProductDetailActivity extends AppCompatActivity {
         productRating = findViewById(R.id.product_detail_rating);
         addToCartButton = findViewById(R.id.add_to_cart_button);
         backButton = findViewById(R.id.back_button);
-
-        // Initialize tool buttons
         callButton = findViewById(R.id.call_button);
         facebookButton = findViewById(R.id.facebook_button);
         mapButton = findViewById(R.id.map_button);
         shareButton = findViewById(R.id.share_button);
     }
 
-    // Static method to create intent for this activity
     public static Intent newIntent(Context context, Product product) {
         Intent intent = new Intent(context, ProductDetailActivity.class);
         intent.putExtra(EXTRA_PRODUCT_NAME, product.getName());
         intent.putExtra(EXTRA_PRODUCT_BRAND, product.getBrand());
         intent.putExtra(EXTRA_PRODUCT_PRICE, product.getPrice());
         intent.putExtra(EXTRA_PRODUCT_RATING, product.getRating());
-        intent.putExtra(EXTRA_PRODUCT_IMAGE, product.getImageResId());
+
+        if (product.getImageUrl() != null && !product.getImageUrl().isEmpty()) {
+            intent.putExtra(EXTRA_PRODUCT_IMAGE_URL, product.getImageUrl());
+        } else {
+            intent.putExtra(EXTRA_PRODUCT_IMAGE, product.getImageResource());
+        }
         return intent;
+    }
+
+    private static class ProductSharer {
+        private final String name;
+        private final String brand;
+        private final String price;
+
+        ProductSharer(String name, String brand, String price) {
+            this.name = name;
+            this.brand = brand;
+            this.price = price;
+        }
+
+        Intent createShareIntent() {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, createShareMessage());
+            return Intent.createChooser(shareIntent, "Share Product via");
+        }
+
+        private String createShareMessage() {
+            return String.format("Check out this product: %s by %s for %s%n%nShared from My Shopping App",
+                    name, brand, price);
+        }
     }
 }

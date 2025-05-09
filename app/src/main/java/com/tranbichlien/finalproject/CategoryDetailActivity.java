@@ -69,25 +69,25 @@ public class CategoryDetailActivity extends AppCompatActivity {
 
         // Add sample products based on category
         if (categoryName.equals("Điện thoại")) {
-            products.add(new Product("Apple", "iPhone 14 Pro Max", "25,000,000", 5.0f, R.drawable.iphone));
-            products.add(new Product("Samsung", "Galaxy S23+", "20,000,000", 5.0f, R.drawable.galaxy));
-            products.add(new Product("Apple", "iPhone 11", "10,000,000", 4.5f, R.drawable.iphone11));
-            products.add(new Product("Samsung", "Galaxy S20", "15,000,000", 4.5f, R.drawable.galaxys20));
+            products.add(new Product("Apple", "iPhone 14 Pro Max", "25,000,000", 5.0f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+            products.add(new Product("Samsung", "Galaxy S23+", "20,000,000", 5.0f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+            products.add(new Product("Apple", "iPhone 11", "10,000,000", 4.5f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+            products.add(new Product("Samsung", "Galaxy S20", "15,000,000", 4.5f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
         } else if (categoryName.equals("Laptop")) {
-            products.add(new Product("Apple", "MacBook Pro", "30,000,000", 4.8f, R.drawable.img_1));
-            products.add(new Product("Dell", "XPS 13", "25,000,000", 4.7f, R.drawable.img_1));
+            products.add(new Product("Apple", "MacBook Pro", "30,000,000", 4.8f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+            products.add(new Product("Dell", "XPS 13", "25,000,000", 4.7f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
         } else if (categoryName.equals("Tablet")) {
-            products.add(new Product("Apple", "iPad Pro", "20,000,000", 4.9f, R.drawable.img_2));
-            products.add(new Product("Samsung", "Galaxy Tab S7", "15,000,000", 4.6f, R.drawable.img_2));
+            products.add(new Product("Apple", "iPad Pro", "20,000,000", 4.9f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+            products.add(new Product("Samsung", "Galaxy Tab S7", "15,000,000", 4.6f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
         } else if (categoryName.equals("Đồng hồ")) {
-            products.add(new Product("Apple", "Apple Watch", "10,000,000", 4.7f, R.drawable.img_3));
-            products.add(new Product("Samsung", "Galaxy Watch", "8,000,000", 4.5f, R.drawable.img_3));
+            products.add(new Product("Apple", "Apple Watch", "10,000,000", 4.7f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+            products.add(new Product("Samsung", "Galaxy Watch", "8,000,000", 4.5f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
         } else if (categoryName.equals("PC-Máy in")) {
-            products.add(new Product("HP", "Desktop PC", "15,000,000", 4.3f, R.drawable.img_4));
-            products.add(new Product("Canon", "Printer", "5,000,000", 4.2f, R.drawable.img_4));
+            products.add(new Product("HP", "Desktop PC", "15,000,000", 4.3f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+            products.add(new Product("Canon", "Printer", "5,000,000", 4.2f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
         } else if (categoryName.equals("Phụ kiện")) {
-            products.add(new Product("Anker", "Power Bank", "1,000,000", 4.4f, R.drawable.img_5));
-            products.add(new Product("Sony", "Headphones", "3,000,000", 4.6f, R.drawable.img_5));
+            products.add(new Product("Anker", "Power Bank", "1,000,000", 4.4f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+            products.add(new Product("Sony", "Headphones", "3,000,000", 4.6f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
         } else {
             // Default products if category is not recognized
             showToast("No products found for this category");

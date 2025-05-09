@@ -34,9 +34,9 @@ public class FavoriteFragment extends Fragment {
 
         // Tạo danh sách sản phẩm yêu thích
         favoriteProducts = new ArrayList<>();
-        favoriteProducts.add(new Product("iPhone 13", "Apple", "$999", 5.0f, R.drawable.iphone13));
-        favoriteProducts.add(new Product("Samsung Galaxy S22", "Samsung", "$899", 4.7f, R.drawable.galaxy));
-        favoriteProducts.add(new Product("Xiaomi Mi 11", "Xiaomi", "$699", 4.6f, R.drawable.xiao11));
+        favoriteProducts.add(new Product("iPhone 13", "Apple", "$999", 5.0f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+        favoriteProducts.add(new Product("Samsung Galaxy S22", "Samsung", "$899", 4.7f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+        favoriteProducts.add(new Product("Xiaomi Mi 11", "Xiaomi", "$699", 4.6f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
 
         // Khởi tạo adapter và gán vào RecyclerView
         adapter = new ProductAdapter(getContext(), favoriteProducts);
