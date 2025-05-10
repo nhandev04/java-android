@@ -28,18 +28,37 @@ public class ProductRepository {
                     @Override
                     public void onResponse(Call<ApiResponse<List<Product>>> call,
                             Response<ApiResponse<List<Product>>> response) {
-                        if (response.isSuccessful() && response.body() != null && response.body().isStatus()) {
-                            productsLiveData.setValue(response.body().getData());
+                        if (response.isSuccessful()) {
+                            if (response.body() != null) {
+                                if (response.body().isStatus()) {
+                                    List<Product> products = response.body().getData();
+
+                                    productsLiveData.setValue(products);
+                                } else {
+
+                                    productsLiveData.setValue(new ArrayList<>()); // Empty list instead of null
+                                }
+                            } else {
+
+                                productsLiveData.setValue(new ArrayList<>()); // Empty list instead of null
+                            }
                         } else {
-                            // Handle error
-                            productsLiveData.setValue(null);
+
+                            try {
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            productsLiveData.setValue(new ArrayList<>()); // Empty list instead of null
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ApiResponse<List<Product>>> call, Throwable t) {
-                        // Handle failure
-                        productsLiveData.setValue(null);
+                        // Log the exception
+
+                        t.printStackTrace();
+                        productsLiveData.setValue(new ArrayList<>()); // Empty list instead of null
                     }
                 });
 
@@ -103,27 +122,33 @@ public class ProductRepository {
                     @Override
                     public void onResponse(Call<ApiResponse<List<Product>>> call,
                             Response<ApiResponse<List<Product>>> response) {
-                        if (response.isSuccessful() && response.body() != null && response.body().isStatus()) {
+
+                        if (response.isSuccessful() && response.body() != null) {
                             // Filter products by tag
                             List<Product> allProducts = response.body().getData();
                             List<Product> filteredProducts = allProducts.stream()
-                                    .filter(product -> product.getTags() != null &&
-                                            product.getTags().stream()
+                                    .filter(product -> {
+                                        if (product.getTags() != null) {
+                                            return product.getTags().stream()
                                                     .map(String::toLowerCase) // Convert all tags to lowercase
-                                                    .anyMatch(tag -> tag.equals(tagName.toLowerCase())))
+                                                    .anyMatch(tag -> tag.equals(tagName.toLowerCase()));
+                                        }
+                                        return false;
+                                    })
                                     .collect(Collectors.toList());
 
                             filteredProductsLiveData.setValue(filteredProducts);
                         } else {
                             // Handle error
-                            filteredProductsLiveData.setValue(new ArrayList<>());
+
+                            filteredProductsLiveData.setValue(null);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ApiResponse<List<Product>>> call, Throwable t) {
                         // Handle failure
-                        filteredProductsLiveData.setValue(new ArrayList<>());
+                        filteredProductsLiveData.setValue(null);
                     }
                 });
 

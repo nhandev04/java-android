@@ -25,5 +25,11 @@ public interface ProductApiService {
         Call<ApiResponse<Product>> getProductById(@Path("id") String id);
 
         @GET("product-tags")
-        Call<ApiResponse<List<Product>>> getProductTags(@Query("limit") Integer limit);
+        Call<ApiResponse<List<String>>> getProductTags(@Query("limit") Integer limit);
+
+        @GET("products")
+        Call<ApiResponse<List<Product>>> getProductsByTag(
+                        @Query("tag") String tag,
+                        @Query("page") Integer page,
+                        @Query("limit") Integer limit);
 }

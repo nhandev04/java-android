@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
@@ -13,18 +12,30 @@
         android:id="@+id/cardView"
         android:layout_width="180dp"
         android:layout_height="200dp"
+        app:cardBackgroundColor="@color/backgroundAd"
         app:cardCornerRadius="0dp"
         app:cardElevation="0dp"
-        app:cardBackgroundColor="@color/backgroundAd"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
             android:id="@+id/productImage_singleProduct"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/iphonex" />
+            android:src="@drawable/apple_logo" />
+
+            <ProgressBar
+            android:id="@+id/loadingIndicator_singleProduct"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+        </FrameLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/heartLayout_singleProduct"
@@ -49,29 +60,28 @@
     </androidx.cardview.widget.CardView>
 
 
-
     <RatingBar
         android:id="@+id/productRating_singleProduct"
+        style="@style/Widget.AppCompat.RatingBar.Indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:numStars="5"
+        android:progressTint="#FFFF00"
         android:rating="4"
-        android:stepSize="0.5"
-        style="@style/Widget.AppCompat.RatingBar.Indicator"
-        android:transformPivotX="0dp"
-        android:transformPivotY="15dp"
         android:scaleX="0.45"
         android:scaleY="0.45"
+        android:secondaryProgressTint="@android:color/transparent"
+        android:stepSize="0.5"
+        android:transformPivotX="0dp"
+        android:transformPivotY="15dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView"
-        android:layout_marginTop="5dp"
-        android:progressTint="#FFFF00"
-        android:secondaryProgressTint="@android:color/transparent"/>
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
     <LinearLayout
         android:id="@+id/linearlayout5"
         android:layout_width="177dp"
-        android:layout_height="97dp"
+        android:layout_height="wrap_content"
         android:background="@color/background"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"

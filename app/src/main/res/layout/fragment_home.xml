@@ -13,6 +13,8 @@
         android:background="@color/white"
         tools:context=".fragment.HomeFragment">
 
+
+
         <!-- Hình ảnh sản phẩm chính -->
         <ImageView
             android:id="@+id/mainProductImage"
@@ -20,7 +22,7 @@
             android:layout_height="490dp"
             android:layout_marginTop="50dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/iphonex"
+            android:src="@drawable/apple_logo"
             app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Tiêu đề sản phẩm chính -->

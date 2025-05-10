@@ -38,6 +38,7 @@ public class HomeFragment extends Fragment {
         private TextView mainProductTitle;
         private Button buyNowButton;
         private Product featuredProduct;
+        private ProductRepository productRepository;
 
         @Nullable
         @Override
@@ -48,85 +49,91 @@ public class HomeFragment extends Fragment {
                 // Khởi tạo RecyclerView
                 newProductsRecycler = view.findViewById(R.id.newProductsRecycler);
                 discountedProductsRecycler = view.findViewById(R.id.discountedProductsRecycler);
-
                 // Initialize main product section UI elements
                 mainProductImage = view.findViewById(R.id.mainProductImage);
                 mainProductTitle = view.findViewById(R.id.mainProductTitle);
                 buyNowButton = view.findViewById(R.id.buyNowButton);
+
+
+                // Initialize repository
+                productRepository = new ProductRepository();
+
+                // Initialize empty lists
+                newProducts = new ArrayList<>();
+                discountedProducts = new ArrayList<>();
+
+                // Set up adapters
+                newProductAdapter = new ProductAdapter(getContext(), newProducts);
+                newProductsRecycler.setLayoutManager(
+                                new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+                newProductsRecycler.setAdapter(newProductAdapter);
+
+                discountedProductAdapter = new ProductAdapter(getContext(), discountedProducts);
+                discountedProductsRecycler.setLayoutManager(
+                                new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+                discountedProductsRecycler.setAdapter(discountedProductAdapter);
+
+                // =====================================================
+
+                // Create a default featured product as fallback
+
                 // Fetch product with tag "Hot" for main product section
-                ProductRepository productRepository = new ProductRepository();
                 productRepository.getProductByTag("Hot").observe(getViewLifecycleOwner(), products -> {
                         if (products != null && !products.isEmpty()) {
                                 featuredProduct = products.get(0); // Take the first product with the "Hot" tag
-
-                                // Update main product section UI
-                                mainProductTitle.setText(featuredProduct.getName());
-                                Glide.with(requireContext())
-                                                .load(featuredProduct.getImageUrl())
-                                                .into(mainProductImage);
-
-                                // Set click listener for Buy Now button
-                                buyNowButton.setOnClickListener(v -> {
-                                        Intent intent = ProductDetailActivity.newIntent(requireContext(),
-                                                        featuredProduct);
-                                        startActivity(intent);
-                                });
+                                updateMainProductUI();
                         } else {
                                 Toast.makeText(requireContext(), "No hot products available", Toast.LENGTH_SHORT)
                                                 .show();
-
-                                // Set up main product section with featured product
-                                mainProductTitle.setText(featuredProduct.getName());
-                                Glide.with(requireContext())
-                                                .load(featuredProduct.getImageUrl())
-                                                .into(mainProductImage);
-
+                                // We'll use the default featuredProduct initialized above
+                                updateMainProductUI();
                         }
                 });
 
-                // Set click listener for Buy Now button
-                buyNowButton.setOnClickListener(v -> {
-                        Intent intent = ProductDetailActivity.newIntent(requireContext(), featuredProduct);
-                        startActivity(intent);
+                // Fetch products with tag "Latest Release" for new products section
+                productRepository.getProductByTag("Latest Release").observe(getViewLifecycleOwner(), products -> {
+                        if (products != null && !products.isEmpty()) {
+                                newProducts.clear();
+                                newProducts.addAll(products);
+                                newProductAdapter.notifyDataSetChanged();
+                        } else {
+                                Toast.makeText(requireContext(), "No latest releases available", Toast.LENGTH_SHORT)
+                                                .show();
+                        }
                 });
 
-                // Dữ liệu mẫu cho sản phẩm mới
-                newProducts = new ArrayList<>();
-                newProducts.add(new Product("iPhone 14", "Apple", "$999", 5.0f,
-                                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-
-                newProducts.add(new Product("iPhone 13 ProMax", "Apple", "$1999", 5.0f,
-                                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-
-                newProducts.add(new Product("Galaxy ", "Samsung", "$796", 4.0f,
-                                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-                newProducts.add(new Product("Galaxys20", "Samsung", "$1572", 4.0f,
-                                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-                // Dữ liệu mẫu cho sản phẩm giảm giá
-                discountedProducts = new ArrayList<>();
-                discountedProducts.add(new Product("iPhone 14", "Apple", "$799", 4.7f,
-                                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-                discountedProducts.add(new Product("iPhone 13", "Apple", "$1799", 4.7f,
-                                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-                discountedProducts.add(new Product("Galaxy", "Samsung", "$600", 4.0f,
-                                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-                discountedProducts.add(new Product("Galaxys20", "Samsung", "$1499", 4.0f,
-                                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-                // Cài đặt Adapter và LayoutManager cho RecyclerView
-                newProductAdapter = new ProductAdapter(getContext(), newProducts); // Tạo adapter riêng cho sản phẩm mới
-                newProductsRecycler
-                                .setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,
-                                                false));
-                newProductsRecycler.setAdapter(newProductAdapter);
-
-                discountedProductAdapter = new ProductAdapter(getContext(), discountedProducts); // Tạo adapter riêng
-                                                                                                 // cho sản
-                                                                                                 // phẩm giảm giá
-                discountedProductsRecycler
-                                .setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,
-                                                false));
-                discountedProductsRecycler.setAdapter(discountedProductAdapter);
+                // Fetch products with tag "On Sale" for discounted products section
+                productRepository.getProductByTag("On Sale").observe(getViewLifecycleOwner(), products -> {
+                        if (products != null && !products.isEmpty()) {
+                                discountedProducts.clear();
+                                discountedProducts.addAll(products);
+                                discountedProductAdapter.notifyDataSetChanged();
+                        } else {
+                                Toast.makeText(requireContext(), "No sale products available", Toast.LENGTH_SHORT)
+                                                .show();
+                        }
+                });
 
                 return view;
+        }
+
+        /**
+         * Update the main product UI section with the current featuredProduct
+         */
+        private void updateMainProductUI() {
+                if (featuredProduct != null) {
+                        mainProductTitle.setText(featuredProduct.getName());
+                        if (featuredProduct.getImageUrl() != null) {
+                                Glide.with(requireContext())
+                                                .load(featuredProduct.getImageUrl())
+                                                .into(mainProductImage);
+                        }
+
+                        // Set click listener for Buy Now button
+                        buyNowButton.setOnClickListener(v -> {
+                                Intent intent = ProductDetailActivity.newIntent(requireContext(), featuredProduct);
+                                startActivity(intent);
+                        });
+                }
         }
 }

@@ -62,7 +62,10 @@ public class Product {
     @SerializedName("tags")
     private List<String> tags;
 
-    @SerializedName("image")
+    @SerializedName("gallery")
+    private Gallery gallery;
+
+    // Image URL is derived from gallery when available
     private String imageUrl = "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"; // For URL
 
     // Legacy fields
@@ -82,6 +85,75 @@ public class Product {
     private int stock;
 
     private int imageResource; // For drawable resource (local only)
+
+    // Inner class for gallery object
+    public static class Gallery {
+        @SerializedName("createdAt")
+        private String createdAt;
+
+        @SerializedName("updatedAt")
+        private String updatedAt;
+
+        @SerializedName("id")
+        private String id;
+
+        @SerializedName("image")
+        private String image;
+
+        @SerializedName("placeholder")
+        private String placeholder;
+
+        @SerializedName("isThumbnail")
+        private boolean isThumbnail;
+
+        public String getCreatedAt() {
+            return createdAt;
+        }
+
+        public void setCreatedAt(String createdAt) {
+            this.createdAt = createdAt;
+        }
+
+        public String getUpdatedAt() {
+            return updatedAt;
+        }
+
+        public void setUpdatedAt(String updatedAt) {
+            this.updatedAt = updatedAt;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
+        }
+
+        public String getPlaceholder() {
+            return placeholder;
+        }
+
+        public void setPlaceholder(String placeholder) {
+            this.placeholder = placeholder;
+        }
+
+        public boolean isThumbnail() {
+            return isThumbnail;
+        }
+
+        public void setThumbnail(boolean thumbnail) {
+            isThumbnail = thumbnail;
+        }
+    }
 
     // Inner class for createdBy object
     public static class CreatedBy {
@@ -213,7 +285,7 @@ public class Product {
         this.brand = brand;
         this.price = price;
         this.rating = rating;
-        this.imageUrl = imageUrl ;
+        this.imageUrl = imageUrl;
         this.imageResource = 0; // Default to 0 if using URL
     }
 
@@ -260,6 +332,10 @@ public class Product {
     }
 
     public String getImageUrl() {
+        // Get image from gallery if available, otherwise return stored imageUrl
+        if (gallery != null && gallery.getImage() != null && !gallery.getImage().isEmpty()) {
+            return gallery.getImage();
+        }
         return imageUrl;
     }
 
@@ -473,6 +549,10 @@ public class Product {
         this.shortDescription = shortDescription;
     }
 
+    public String getShortDescriotion() {
+        return shortDescription;
+    }
+
     /**
      * Get the product type
      * 
@@ -636,6 +716,24 @@ public class Product {
     }
 
     /**
+     * Get the gallery of the product
+     * 
+     * @return The gallery
+     */
+    public Gallery getGallery() {
+        return gallery;
+    }
+
+    /**
+     * Set the gallery of the product
+     * 
+     * @param gallery The new gallery
+     */
+    public void setGallery(Gallery gallery) {
+        this.gallery = gallery;
+    }
+
+    /**
      * Constructor for API response
      * 
      * @param id                The ID of the product
@@ -658,12 +756,13 @@ public class Product {
      * @param createdBy         The creator
      * @param tags              The list of tags
      * @param imageUrl          The URL of the product image
+     * @param gallery           The gallery of the product
      */
     public Product(String id, String slug, String name, String sku, double salePrice, double comparePrice,
-                  double buyingPrice, int quantity, String shortDescription, String description,
-                  String productType, boolean published, boolean disableOutOfStock, String note,
-                  List<String> categories, String createdAt, String updatedAt, CreatedBy createdBy,
-                  List<String> tags, String imageUrl) {
+            double buyingPrice, int quantity, String shortDescription, String description,
+            String productType, boolean published, boolean disableOutOfStock, String note,
+            List<String> categories, String createdAt, String updatedAt, CreatedBy createdBy,
+            List<String> tags, String imageUrl, Gallery gallery) {
         this.id = id;
         this.slug = slug;
         this.name = name;
@@ -684,6 +783,7 @@ public class Product {
         this.createdBy = createdBy;
         this.tags = tags;
         this.imageUrl = imageUrl;
+        this.gallery = gallery;
         this.imageResource = 0; // Default to 0 when using URL
 
         // Set legacy fields for backward compatibility
@@ -705,8 +805,8 @@ public class Product {
      * @param categoryId  The category ID of the product
      * @param stock       The stock quantity of the product
      */
-    public Product(String id, String name, String slug, String brand, String price, float rating, 
-                  String imageUrl, String description, String categoryId, int stock) {
+    public Product(String id, String name, String slug, String brand, String price, float rating,
+            String imageUrl, String description, String categoryId, int stock) {
         this.id = id;
         this.name = name;
         this.slug = slug;
