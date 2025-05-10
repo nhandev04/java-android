@@ -1,4 +1,4 @@
-package com.tranbichlien.finalproject;
+package com.tranbichlien.finalproject.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,6 +6,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.tranbichlien.finalproject.entity.Product;
+import com.tranbichlien.finalproject.R;
 
 public class ProductDetailActivity extends AppCompatActivity {
     private static final String PHONE_NUMBER = "tel:0123456789";
@@ -39,7 +42,8 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void processIntentData(Intent intent) {
-        if (intent == null) return;
+        if (intent == null)
+            return;
 
         String name = intent.getStringExtra(EXTRA_PRODUCT_NAME);
         String brand = intent.getStringExtra(EXTRA_PRODUCT_BRAND);
@@ -52,7 +56,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void updateUIWithProductData(String name, String brand, String price,
-                                       float rating, String imageUrl, int imageResId) {
+            float rating, String imageUrl, int imageResId) {
         productName.setText(name);
         productBrand.setText(brand);
         productPrice.setText(price);
@@ -60,8 +64,8 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
             com.bumptech.glide.Glide.with(this)
-                .load(imageUrl)
-                .into(productImage);
+                    .load(imageUrl)
+                    .into(productImage);
         } else {
             productImage.setImageResource(imageResId);
         }
@@ -115,8 +119,8 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private void handleShareButton() {
         ProductSharer sharer = new ProductSharer(productName.getText().toString(),
-                                               productBrand.getText().toString(),
-                                               productPrice.getText().toString());
+                productBrand.getText().toString(),
+                productPrice.getText().toString());
         try {
             startActivity(sharer.createShareIntent());
         } catch (Exception e) {
@@ -145,8 +149,27 @@ public class ProductDetailActivity extends AppCompatActivity {
     public static Intent newIntent(Context context, Product product) {
         Intent intent = new Intent(context, ProductDetailActivity.class);
         intent.putExtra(EXTRA_PRODUCT_NAME, product.getName());
-        intent.putExtra(EXTRA_PRODUCT_BRAND, product.getBrand());
-        intent.putExtra(EXTRA_PRODUCT_PRICE, product.getPrice());
+
+        // Use brand if available, otherwise use first category
+        String brand = product.getBrand();
+        if (brand == null || brand.isEmpty()) {
+            if (product.getCategories() != null && !product.getCategories().isEmpty()) {
+                brand = product.getCategories().get(0);
+            } else {
+                brand = ""; // Default empty string if no brand or categories
+            }
+        }
+        intent.putExtra(EXTRA_PRODUCT_BRAND, brand);
+
+        // Use salePrice if available, otherwise use legacy price
+        String price;
+        if (product.getSalePrice() > 0) {
+            price = String.format("%.2f", product.getSalePrice());
+        } else {
+            price = product.getPrice();
+        }
+        intent.putExtra(EXTRA_PRODUCT_PRICE, price);
+
         intent.putExtra(EXTRA_PRODUCT_RATING, product.getRating());
 
         if (product.getImageUrl() != null && !product.getImageUrl().isEmpty()) {

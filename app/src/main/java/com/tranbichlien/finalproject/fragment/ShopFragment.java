@@ -1,4 +1,4 @@
-package com.tranbichlien.finalproject;
+package com.tranbichlien.finalproject.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,7 +14,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.tranbichlien.finalproject.R;
+import com.tranbichlien.finalproject.adapter.CategoryAdapter;
+import com.tranbichlien.finalproject.adapter.ProductAdapter;
+import com.tranbichlien.finalproject.api.repository.CategoryRepository;
+import com.tranbichlien.finalproject.api.repository.ProductRepository;
+import com.tranbichlien.finalproject.entity.Category;
+import com.tranbichlien.finalproject.entity.Product;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class ShopFragment extends Fragment {
 
@@ -74,10 +84,14 @@ public class ShopFragment extends Fragment {
 
     private void setupProductsRecyclerView() {
         ArrayList<Product> products = new ArrayList<>();
-        products.add(new Product("Apple", "iPhone 14 Pro Max", "25,000,000", 5.0f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        products.add(new Product("Samsung", "Galaxy S23+", "20,000,000", 5.0f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        products.add(new Product("Apple", "iPhone 11", "10,000,000", 4.5f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        products.add(new Product("Samsung", "Galaxy S20", "15,000,000", 4.5f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+        products.add(new Product("Apple", "iPhone 14 Pro Max", "25,000,000", 5.0f,
+                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+        products.add(new Product("Samsung", "Galaxy S23+", "20,000,000", 5.0f,
+                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+        products.add(new Product("Apple", "iPhone 11", "10,000,000", 4.5f,
+                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+        products.add(new Product("Samsung", "Galaxy S20", "15,000,000", 4.5f,
+                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
         ProductAdapter productAdapter = new ProductAdapter(getContext(), products);
         productsRecView.setAdapter(productAdapter);
         productsRecView.setLayoutManager(new GridLayoutManager(getContext(), 2));

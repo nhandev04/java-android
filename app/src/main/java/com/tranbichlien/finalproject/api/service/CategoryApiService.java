@@ -15,7 +15,7 @@ import retrofit2.http.Query;
  * Retrofit service interface for category-related API endpoints
  */
 public interface CategoryApiService {
-    
+
     /**
      * Get a list of categories
      * 
@@ -28,7 +28,7 @@ public interface CategoryApiService {
             @Query("page") Integer page,
             @Query("limit") Integer limit
     );
-    
+
     /**
      * Get a category by ID
      * 
@@ -36,8 +36,8 @@ public interface CategoryApiService {
      * @return A Call object with the API response
      */
     @GET("categories/{id}")
-    Call<ApiResponse<Category>> getCategoryById(@Path("id") int id);
-    
+    Call<ApiResponse<Category>> getCategoryById(@Path("id") String id);
+
     /**
      * Get products by category ID
      * 
@@ -48,7 +48,22 @@ public interface CategoryApiService {
      */
     @GET("categories/{id}/products")
     Call<ApiResponse<List<Product>>> getProductsByCategory(
-            @Path("id") int id,
+            @Path("id") String id,
+            @Query("page") Integer page,
+            @Query("limit") Integer limit
+    );
+
+    /**
+     * Get products by category name
+     * 
+     * @param name  The name of the category
+     * @param page  The page number (optional)
+     * @param limit The number of items per page (optional)
+     * @return A Call object with the API response
+     */
+    @GET("products")
+    Call<ApiResponse<List<Product>>> getProductsByCategoryName(
+            @Query("category") String name,
             @Query("page") Integer page,
             @Query("limit") Integer limit
     );

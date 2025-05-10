@@ -1,4 +1,4 @@
-package com.tranbichlien.finalproject;
+package com.tranbichlien.finalproject.activity;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -8,6 +8,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
+
+import com.tranbichlien.finalproject.R;
 
 public class SettingsActivity extends AppCompatActivity {
 

@@ -1,27 +1,39 @@
-package com.tranbichlien.finalproject;
+package com.tranbichlien.finalproject.activity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.tranbichlien.finalproject.adapter.ProductAdapter;
+import com.tranbichlien.finalproject.R;
+import com.tranbichlien.finalproject.api.repository.CategoryRepository;
+import com.tranbichlien.finalproject.entity.Category;
+import com.tranbichlien.finalproject.entity.Product;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class CategoryDetailActivity extends AppCompatActivity {
 
     private ImageView backButton;
     private TextView categoryTitleTextView;
     private RecyclerView productsRecyclerView;
+    private ProgressBar progressBar;
+    private CategoryRepository categoryRepository;
 
     // Constants for intent extras
-    public static final String EXTRA_CATEGORY_NAME="category_name";
-    public static final String EXTRA_CATEGORY_IMAGE="category_image";
+    public static final String EXTRA_CATEGORY_NAME = "category_name";
+    public static final String EXTRA_CATEGORY_IMAGE = "category_image";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +66,9 @@ public class CategoryDetailActivity extends AppCompatActivity {
         categoryTitleTextView = findViewById(R.id.category_title);
         productsRecyclerView = findViewById(R.id.products_recycler_view);
 
+        // Initialize the CategoryRepository
+        categoryRepository = new CategoryRepository();
+
         // Set up RecyclerView with GridLayoutManager (2 columns)
         productsRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
     }
@@ -64,33 +79,77 @@ public class CategoryDetailActivity extends AppCompatActivity {
     }
 
     private void loadProductsForCategory(String categoryName) {
+        // Show progress bar while loading
+        progressBar.setVisibility(View.VISIBLE);
+
+        // Use the CategoryRepository to fetch products by category name
+        categoryRepository.getProductsByCategoryName(categoryName, null, null)
+                .observe(this, new Observer<List<Product>>() {
+                    @Override
+                    public void onChanged(List<Product> products) {
+                        // Hide progress bar
+                        progressBar.setVisibility(View.GONE);
+
+                        if (products != null && !products.isEmpty()) {
+                            // Convert List to ArrayList if needed
+                            ArrayList<Product> productArrayList = new ArrayList<>(products);
+
+                            // Set adapter
+                            ProductAdapter productAdapter = new ProductAdapter(CategoryDetailActivity.this,
+                                    productArrayList);
+                            productsRecyclerView.setAdapter(productAdapter);
+                        } else {
+                            // Show message if no products found
+                            showToast("No products found for this category");
+
+                            // Fallback to sample data for demo purposes
+                            loadSampleProductsForCategory(categoryName);
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Load sample products for a category (fallback method)
+     * 
+     * @param categoryName The name of the category
+     */
+    private void loadSampleProductsForCategory(String categoryName) {
         // Create a list of products for the selected category
         ArrayList<Product> products = new ArrayList<>();
 
         // Add sample products based on category
-        if (categoryName.equals("Điện thoại")) {
-            products.add(new Product("Apple", "iPhone 14 Pro Max", "25,000,000", 5.0f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-            products.add(new Product("Samsung", "Galaxy S23+", "20,000,000", 5.0f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-            products.add(new Product("Apple", "iPhone 11", "10,000,000", 4.5f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-            products.add(new Product("Samsung", "Galaxy S20", "15,000,000", 4.5f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        } else if (categoryName.equals("Laptop")) {
-            products.add(new Product("Apple", "MacBook Pro", "30,000,000", 4.8f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-            products.add(new Product("Dell", "XPS 13", "25,000,000", 4.7f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        } else if (categoryName.equals("Tablet")) {
-            products.add(new Product("Apple", "iPad Pro", "20,000,000", 4.9f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-            products.add(new Product("Samsung", "Galaxy Tab S7", "15,000,000", 4.6f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        } else if (categoryName.equals("Đồng hồ")) {
-            products.add(new Product("Apple", "Apple Watch", "10,000,000", 4.7f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-            products.add(new Product("Samsung", "Galaxy Watch", "8,000,000", 4.5f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        } else if (categoryName.equals("PC-Máy in")) {
-            products.add(new Product("HP", "Desktop PC", "15,000,000", 4.3f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-            products.add(new Product("Canon", "Printer", "5,000,000", 4.2f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        } else if (categoryName.equals("Phụ kiện")) {
-            products.add(new Product("Anker", "Power Bank", "1,000,000", 4.4f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-            products.add(new Product("Sony", "Headphones", "3,000,000", 4.6f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+        if (categoryName.equals("Điện thoại") || categoryName.equals("iPhones")) {
+            products.add(new Product("Apple", "iPhone 14 Pro Max", "25,000,000", 5.0f,
+                    "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+            products.add(new Product("Samsung", "Galaxy S23+", "20,000,000", 5.0f,
+                    "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+        } else if (categoryName.equals("Laptop") || categoryName.equals("MacBooks")) {
+            products.add(new Product("Apple", "MacBook Pro", "30,000,000", 4.8f,
+                    "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+            products.add(new Product("Dell", "XPS 13", "25,000,000", 4.7f,
+                    "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+        } else if (categoryName.equals("Tablet") || categoryName.equals("iPads")) {
+            products.add(new Product("Apple", "iPad Pro", "20,000,000", 4.9f,
+                    "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+            products.add(new Product("Samsung", "Galaxy Tab S7", "15,000,000", 4.6f,
+                    "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+        } else if (categoryName.equals("Đồng hồ") || categoryName.equals("Apple Watch")) {
+            products.add(new Product("Apple", "Apple Watch", "10,000,000", 4.7f,
+                    "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+            products.add(new Product("Samsung", "Galaxy Watch", "8,000,000", 4.5f,
+                    "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+        } else if (categoryName.equals("Services")) {
+            products.add(new Product("Apple", "AppleCare+", "2,000,000", 4.8f,
+                    "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+            products.add(new Product("Apple", "iCloud Storage", "500,000", 4.5f,
+                    "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
         } else {
             // Default products if category is not recognized
-            showToast("No products found for this category");
+            products.add(new Product("Apple", "AirPods Pro", "5,000,000", 4.7f,
+                    "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+            products.add(new Product("Apple", "Apple Pencil", "3,000,000", 4.6f,
+                    "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
         }
 
         // Set adapter if there are products

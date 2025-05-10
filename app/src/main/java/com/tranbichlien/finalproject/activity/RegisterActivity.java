@@ -1,9 +1,11 @@
-package com.tranbichlien.finalproject;
+package com.tranbichlien.finalproject.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import com.tranbichlien.finalproject.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 

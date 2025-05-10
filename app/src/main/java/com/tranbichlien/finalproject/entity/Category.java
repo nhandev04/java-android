@@ -7,10 +7,13 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Category {
     @SerializedName("id")
-    private int id;
+    private String id;
 
     @SerializedName("name")
     private String name;
+
+    @SerializedName("description")
+    private String description;
 
     @SerializedName("image")
     private String imageUrl;
@@ -70,7 +73,7 @@ public class Category {
      * 
      * @return The category ID
      */
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -79,8 +82,26 @@ public class Category {
      * 
      * @param id The new category ID
      */
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
+    }
+
+    /**
+     * Get the description of the category
+     * 
+     * @return The category description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Set the description of the category
+     * 
+     * @param description The new category description
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     /**
@@ -102,15 +123,17 @@ public class Category {
     }
 
     /**
-     * Constructor for API response (with ID and image URL)
+     * Constructor for API response (with ID, description, and image URL)
      * 
-     * @param id       The ID of the category
-     * @param name     The name of the category
-     * @param imageUrl The URL of the category image
+     * @param id          The ID of the category
+     * @param name        The name of the category
+     * @param description The description of the category
+     * @param imageUrl    The URL of the category image
      */
-    public Category(int id, String name, String imageUrl) {
+    public Category(String id, String name, String description, String imageUrl) {
         this.id = id;
         this.name = name;
+        this.description = description;
         this.imageUrl = imageUrl;
         this.imageResource = 0; // Default to 0 when using URL
     }

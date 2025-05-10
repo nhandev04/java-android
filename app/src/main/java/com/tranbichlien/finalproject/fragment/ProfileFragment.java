@@ -1,4 +1,4 @@
-package com.tranbichlien.finalproject;
+package com.tranbichlien.finalproject.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+
+import com.tranbichlien.finalproject.R;
+
+import com.tranbichlien.finalproject.activity.AddressActivity;
+import com.tranbichlien.finalproject.activity.CouponsActivity;
+import com.tranbichlien.finalproject.activity.OrdersActivity;
+import com.tranbichlien.finalproject.activity.PaymentMethodActivity;
+import com.tranbichlien.finalproject.activity.ProfileConfigActivity;
+import com.tranbichlien.finalproject.activity.SettingsActivity;
 
 public class ProfileFragment extends Fragment {
 

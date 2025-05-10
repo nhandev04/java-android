@@ -1,4 +1,4 @@
-package com.tranbichlien.finalproject;
+package com.tranbichlien.finalproject.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
@@ -23,6 +23,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import com.tranbichlien.finalproject.R;
+import com.tranbichlien.finalproject.entity.Product;
+import com.tranbichlien.finalproject.fragment.BagFragment;
+import com.tranbichlien.finalproject.fragment.FavoriteFragment;
+import com.tranbichlien.finalproject.fragment.HomeFragment;
+import com.tranbichlien.finalproject.fragment.ProfileFragment;
+import com.tranbichlien.finalproject.fragment.ShopFragment;
 
 public class MainActivity extends AppCompatActivity {
     FavoriteFragment favoriteFragment;
@@ -125,11 +133,16 @@ public class MainActivity extends AppCompatActivity {
      */
     private void initSampleProducts() {
         sampleProducts = new ArrayList<>();
-        sampleProducts.add(new Product("iPhone 14", "Apple", "$999", 5.0f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        sampleProducts.add(new Product("iPhone 13 ProMax", "Apple", "$1999", 5.0f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        sampleProducts.add(new Product("Galaxy S22", "Samsung", "$796", 4.0f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        sampleProducts.add(new Product("Galaxy S20", "Samsung", "$1572", 4.0f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        sampleProducts.add(new Product("iPhone 13", "Apple", "$799", 4.7f, "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+        sampleProducts.add(new Product("iPhone 14", "Apple", "$999", 5.0f,
+                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+        sampleProducts.add(new Product("iPhone 13 ProMax", "Apple", "$1999", 5.0f,
+                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+        sampleProducts.add(new Product("Galaxy S22", "Samsung", "$796", 4.0f,
+                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+        sampleProducts.add(new Product("Galaxy S20", "Samsung", "$1572", 4.0f,
+                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+        sampleProducts.add(new Product("iPhone 13", "Apple", "$799", 4.7f,
+                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
     }
 
     /**

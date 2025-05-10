@@ -1,4 +1,4 @@
-package com.tranbichlien.finalproject;
+package com.tranbichlien.finalproject.activity;
 
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -7,6 +7,10 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.tranbichlien.finalproject.R;
+import com.tranbichlien.finalproject.adapter.CategoryAdapter;
+import com.tranbichlien.finalproject.entity.Category;
 
 import java.util.ArrayList;
 
