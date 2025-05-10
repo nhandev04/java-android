@@ -15,56 +15,23 @@ import retrofit2.http.Query;
  * Retrofit service interface for category-related API endpoints
  */
 public interface CategoryApiService {
+        @GET("categories")
+        Call<ApiResponse<List<Category>>> getCategories(
+                        @Query("page") Integer page,
+                        @Query("limit") Integer limit);
 
-    /**
-     * Get a list of categories
-     * 
-     * @param page  The page number (optional)
-     * @param limit The number of items per page (optional)
-     * @return A Call object with the API response
-     */
-    @GET("categories")
-    Call<ApiResponse<List<Category>>> getCategories(
-            @Query("page") Integer page,
-            @Query("limit") Integer limit
-    );
+        @GET("categories/{id}")
+        Call<ApiResponse<Category>> getCategoryById(@Path("id") String id);
 
-    /**
-     * Get a category by ID
-     * 
-     * @param id The ID of the category
-     * @return A Call object with the API response
-     */
-    @GET("categories/{id}")
-    Call<ApiResponse<Category>> getCategoryById(@Path("id") String id);
+        @GET("categories/{id}/products")
+        Call<ApiResponse<List<Product>>> getProductsByCategory(
+                        @Path("id") String id,
+                        @Query("page") Integer page,
+                        @Query("limit") Integer limit);
 
-    /**
-     * Get products by category ID
-     * 
-     * @param id    The ID of the category
-     * @param page  The page number (optional)
-     * @param limit The number of items per page (optional)
-     * @return A Call object with the API response
-     */
-    @GET("categories/{id}/products")
-    Call<ApiResponse<List<Product>>> getProductsByCategory(
-            @Path("id") String id,
-            @Query("page") Integer page,
-            @Query("limit") Integer limit
-    );
-
-    /**
-     * Get products by category name
-     * 
-     * @param name  The name of the category
-     * @param page  The page number (optional)
-     * @param limit The number of items per page (optional)
-     * @return A Call object with the API response
-     */
-    @GET("products")
-    Call<ApiResponse<List<Product>>> getProductsByCategoryName(
-            @Query("category") String name,
-            @Query("page") Integer page,
-            @Query("limit") Integer limit
-    );
+        @GET("products")
+        Call<ApiResponse<List<Product>>> getProductsByCategoryName(
+                        @Query("category") String name,
+                        @Query("page") Integer page,
+                        @Query("limit") Integer limit);
 }

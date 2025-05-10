@@ -2,6 +2,7 @@ package com.tranbichlien.finalproject.api;
 
 import com.tranbichlien.finalproject.api.service.CategoryApiService;
 import com.tranbichlien.finalproject.api.service.ProductApiService;
+import com.tranbichlien.finalproject.api.service.TagApiService;
 
 import java.util.concurrent.TimeUnit;
 
@@ -16,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
     private static Retrofit retrofit = null;
     private static OkHttpClient okHttpClient = null;
-    
+
     /**
      * Get the Retrofit instance
      * 
@@ -32,7 +33,7 @@ public class ApiClient {
         }
         return retrofit;
     }
-    
+
     /**
      * Get the OkHttpClient instance
      * 
@@ -43,7 +44,7 @@ public class ApiClient {
             // Create a logging interceptor for debugging
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            
+
             // Build the OkHttpClient with timeouts and logging
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(ApiConstants.CONNECT_TIMEOUT, TimeUnit.SECONDS)
@@ -54,7 +55,7 @@ public class ApiClient {
         }
         return okHttpClient;
     }
-    
+
     /**
      * Get the ProductApiService instance
      * 
@@ -63,7 +64,7 @@ public class ApiClient {
     public static ProductApiService getProductApiService() {
         return getRetrofit().create(ProductApiService.class);
     }
-    
+
     /**
      * Get the CategoryApiService instance
      * 
@@ -71,5 +72,14 @@ public class ApiClient {
      */
     public static CategoryApiService getCategoryApiService() {
         return getRetrofit().create(CategoryApiService.class);
+    }
+
+    /**
+     * Get the TagApiService instance
+     * 
+     * @return The TagApiService instance
+     */
+    public static TagApiService getTagApiService() {
+        return getRetrofit().create(TagApiService.class);
     }
 }
