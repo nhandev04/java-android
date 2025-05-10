@@ -43,7 +43,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         Product product = products.get(position);
         holder.productName.setText(product.getName());
         holder.productBrand.setText(product.getBrand());
-        holder.productPrice.setText(product.getPrice());
+        holder.productPrice.setText(product.getSalePrice() + " đ");
+        holder.productDescription.setText(product.getShortDescription());
 
         // Nếu là URL thì dùng Glide
         if (product.getImageUrl() != null) {
@@ -71,7 +72,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView productImage;
-        TextView productName, productBrand, productPrice;
+        TextView productName, productBrand, productPrice, productDescription;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -79,6 +80,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             productName = itemView.findViewById(R.id.productName_singleProduct);
             productBrand = itemView.findViewById(R.id.productBrandName_singleProduct);
             productPrice = itemView.findViewById(R.id.productPrice_singleProduct);
+            productDescription = itemView.findViewById(R.id.productDescription_singleProduct);
         }
     }
 }

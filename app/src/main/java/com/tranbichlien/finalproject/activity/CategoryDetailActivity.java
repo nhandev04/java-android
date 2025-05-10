@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.tranbichlien.finalproject.adapter.ProductAdapter;
 import com.tranbichlien.finalproject.R;
 import com.tranbichlien.finalproject.api.repository.CategoryRepository;
+import com.tranbichlien.finalproject.api.repository.ProductRepository;
 import com.tranbichlien.finalproject.entity.Category;
 import com.tranbichlien.finalproject.entity.Product;
 
@@ -30,6 +31,7 @@ public class CategoryDetailActivity extends AppCompatActivity {
     private RecyclerView productsRecyclerView;
     private ProgressBar progressBar;
     private CategoryRepository categoryRepository;
+    private ProductRepository productRepository;
 
     // Constants for intent extras
     public static final String EXTRA_CATEGORY_NAME = "category_name";
@@ -83,7 +85,7 @@ public class CategoryDetailActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
 
         // Use the CategoryRepository to fetch products by category name
-        categoryRepository.getProductsByCategoryName(categoryName, null, null)
+        productRepository.getProductByCategory(categoryName)
                 .observe(this, new Observer<List<Product>>() {
                     @Override
                     public void onChanged(List<Product> products) {

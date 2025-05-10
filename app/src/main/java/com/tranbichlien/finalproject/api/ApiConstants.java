@@ -5,7 +5,7 @@ package com.tranbichlien.finalproject.api;
  */
 public class ApiConstants {
     // Base URL for the API
-    public static final String BASE_URL = "http://172.28.64.1:8080/api/"; // Replace with actual API server URL
+    public static final String BASE_URL = "http://172.28.144.1:8080/api/"; // Replace with actual API server URL
 
     // Endpoints
     public static final String ENDPOINT_PRODUCTS = "products";

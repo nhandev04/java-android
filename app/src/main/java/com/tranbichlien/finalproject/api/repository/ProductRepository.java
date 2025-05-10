@@ -66,7 +66,9 @@ public class ProductRepository {
                             List<Product> allProducts = response.body().getData();
                             List<Product> filteredProducts = allProducts.stream()
                                     .filter(product -> product.getCategories() != null &&
-                                            product.getCategories().contains(categoryName))
+                                            product.getCategories().stream()
+                                                    .map(String::toLowerCase) // Convert all categories to lowercase
+                                                    .anyMatch(category -> category.equals(categoryName.toLowerCase())))
                                     .collect(Collectors.toList());
 
                             filteredProductsLiveData.setValue(filteredProducts);
@@ -106,7 +108,9 @@ public class ProductRepository {
                             List<Product> allProducts = response.body().getData();
                             List<Product> filteredProducts = allProducts.stream()
                                     .filter(product -> product.getTags() != null &&
-                                            product.getTags().contains(tagName))
+                                            product.getTags().stream()
+                                                    .map(String::toLowerCase) // Convert all tags to lowercase
+                                                    .anyMatch(tag -> tag.equals(tagName.toLowerCase())))
                                     .collect(Collectors.toList());
 
                             filteredProductsLiveData.setValue(filteredProducts);

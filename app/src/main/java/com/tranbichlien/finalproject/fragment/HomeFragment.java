@@ -29,84 +29,104 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
 
-    private RecyclerView newProductsRecycler, discountedProductsRecycler;
-    private ArrayList<Product> newProducts, discountedProducts;
-    private ProductAdapter newProductAdapter, discountedProductAdapter;
+        private RecyclerView newProductsRecycler, discountedProductsRecycler;
+        private ArrayList<Product> newProducts, discountedProducts;
+        private ProductAdapter newProductAdapter, discountedProductAdapter;
 
-    // Main product section UI elements
-    private ImageView mainProductImage;
-    private TextView mainProductTitle;
-    private Button buyNowButton;
-    private Product featuredProduct;
+        // Main product section UI elements
+        private ImageView mainProductImage;
+        private TextView mainProductTitle;
+        private Button buyNowButton;
+        private Product featuredProduct;
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                        @Nullable Bundle savedInstanceState) {
+                View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // Khởi tạo RecyclerView
-        newProductsRecycler = view.findViewById(R.id.newProductsRecycler);
-        discountedProductsRecycler = view.findViewById(R.id.discountedProductsRecycler);
+                // Khởi tạo RecyclerView
+                newProductsRecycler = view.findViewById(R.id.newProductsRecycler);
+                discountedProductsRecycler = view.findViewById(R.id.discountedProductsRecycler);
 
-        // Initialize main product section UI elements
-        mainProductImage = view.findViewById(R.id.mainProductImage);
-        mainProductTitle = view.findViewById(R.id.mainProductTitle);
-        buyNowButton = view.findViewById(R.id.buyNowButton);
+                // Initialize main product section UI elements
+                mainProductImage = view.findViewById(R.id.mainProductImage);
+                mainProductTitle = view.findViewById(R.id.mainProductTitle);
+                buyNowButton = view.findViewById(R.id.buyNowButton);
+                // Fetch product with tag "Hot" for main product section
+                ProductRepository productRepository = new ProductRepository();
+                productRepository.getProductByTag("Hot").observe(getViewLifecycleOwner(), products -> {
+                        if (products != null && !products.isEmpty()) {
+                                featuredProduct = products.get(0); // Take the first product with the "Hot" tag
 
-        // Create featured product for main product section
-        featuredProduct = new Product("iPhone 14", "Apple", "$999", 5.0f,
-                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp");
+                                // Update main product section UI
+                                mainProductTitle.setText(featuredProduct.getName());
+                                Glide.with(requireContext())
+                                                .load(featuredProduct.getImageUrl())
+                                                .into(mainProductImage);
 
-        // Set up main product section with featured product
-        mainProductTitle.setText(featuredProduct.getName());
-        Glide.with(requireContext())
-                .load(featuredProduct.getImageUrl())
-                .into(mainProductImage);
+                                // Set click listener for Buy Now button
+                                buyNowButton.setOnClickListener(v -> {
+                                        Intent intent = ProductDetailActivity.newIntent(requireContext(),
+                                                        featuredProduct);
+                                        startActivity(intent);
+                                });
+                        } else {
+                                Toast.makeText(requireContext(), "No hot products available", Toast.LENGTH_SHORT)
+                                                .show();
 
-        // Set click listener for Buy Now button
-        buyNowButton.setOnClickListener(v -> {
-            Intent intent = ProductDetailActivity.newIntent(requireContext(), featuredProduct);
-            startActivity(intent);
-        });
+                                // Set up main product section with featured product
+                                mainProductTitle.setText(featuredProduct.getName());
+                                Glide.with(requireContext())
+                                                .load(featuredProduct.getImageUrl())
+                                                .into(mainProductImage);
 
-        // Dữ liệu mẫu cho sản phẩm mới
-        newProducts = new ArrayList<>();
-        newProducts.add(new Product("iPhone 14", "Apple", "$999", 5.0f,
-                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+                        }
+                });
 
-        newProducts.add(new Product("iPhone 13 ProMax", "Apple", "$1999", 5.0f,
-                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+                // Set click listener for Buy Now button
+                buyNowButton.setOnClickListener(v -> {
+                        Intent intent = ProductDetailActivity.newIntent(requireContext(), featuredProduct);
+                        startActivity(intent);
+                });
 
-        newProducts.add(new Product("Galaxy ", "Samsung", "$796", 4.0f,
-                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        newProducts.add(new Product("Galaxys20", "Samsung", "$1572", 4.0f,
-                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        // Dữ liệu mẫu cho sản phẩm giảm giá
-        discountedProducts = new ArrayList<>();
-        discountedProducts.add(new Product("iPhone 14", "Apple", "$799", 4.7f,
-                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        discountedProducts.add(new Product("iPhone 13", "Apple", "$1799", 4.7f,
-                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        discountedProducts.add(new Product("Galaxy", "Samsung", "$600", 4.0f,
-                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        discountedProducts.add(new Product("Galaxys20", "Samsung", "$1499", 4.0f,
-                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        // Cài đặt Adapter và LayoutManager cho RecyclerView
-        newProductAdapter = new ProductAdapter(getContext(), newProducts); // Tạo adapter riêng cho sản phẩm mới
-        newProductsRecycler
-                .setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,
-                        false));
-        newProductsRecycler.setAdapter(newProductAdapter);
+                // Dữ liệu mẫu cho sản phẩm mới
+                newProducts = new ArrayList<>();
+                newProducts.add(new Product("iPhone 14", "Apple", "$999", 5.0f,
+                                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
 
-        discountedProductAdapter = new ProductAdapter(getContext(), discountedProducts); // Tạo adapter riêng
-                                                                                         // cho sản
-                                                                                         // phẩm giảm giá
-        discountedProductsRecycler
-                .setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,
-                        false));
-        discountedProductsRecycler.setAdapter(discountedProductAdapter);
+                newProducts.add(new Product("iPhone 13 ProMax", "Apple", "$1999", 5.0f,
+                                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
 
-        return view;
-    }
+                newProducts.add(new Product("Galaxy ", "Samsung", "$796", 4.0f,
+                                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+                newProducts.add(new Product("Galaxys20", "Samsung", "$1572", 4.0f,
+                                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+                // Dữ liệu mẫu cho sản phẩm giảm giá
+                discountedProducts = new ArrayList<>();
+                discountedProducts.add(new Product("iPhone 14", "Apple", "$799", 4.7f,
+                                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+                discountedProducts.add(new Product("iPhone 13", "Apple", "$1799", 4.7f,
+                                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+                discountedProducts.add(new Product("Galaxy", "Samsung", "$600", 4.0f,
+                                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+                discountedProducts.add(new Product("Galaxys20", "Samsung", "$1499", 4.0f,
+                                "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
+                // Cài đặt Adapter và LayoutManager cho RecyclerView
+                newProductAdapter = new ProductAdapter(getContext(), newProducts); // Tạo adapter riêng cho sản phẩm mới
+                newProductsRecycler
+                                .setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,
+                                                false));
+                newProductsRecycler.setAdapter(newProductAdapter);
+
+                discountedProductAdapter = new ProductAdapter(getContext(), discountedProducts); // Tạo adapter riêng
+                                                                                                 // cho sản
+                                                                                                 // phẩm giảm giá
+                discountedProductsRecycler
+                                .setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,
+                                                false));
+                discountedProductsRecycler.setAdapter(discountedProductAdapter);
+
+                return view;
+        }
 }
