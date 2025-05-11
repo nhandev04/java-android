@@ -1,6 +1,7 @@
 package com.tranbichlien.finalproject.fragment;
 
 import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,10 +18,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import com.bumptech.glide.Glide;
 import com.tranbichlien.finalproject.adapter.ProductAdapter;
 import com.tranbichlien.finalproject.activity.ProductDetailActivity;
+import com.tranbichlien.finalproject.activity.AllCategoriesActivity;
 import com.tranbichlien.finalproject.R;
 import com.tranbichlien.finalproject.api.repository.ProductRepository;
 import com.tranbichlien.finalproject.entity.Product;
@@ -35,7 +38,7 @@ public class HomeFragment extends Fragment {
 
         // Main product section UI elements
         private ImageView mainProductImage;
-        private TextView mainProductTitle;
+        private TextView mainProductTitle, viewMore, viewMoreDiscounts;
         private Button buyNowButton;
         private Product featuredProduct;
         private ProductRepository productRepository;
@@ -54,6 +57,19 @@ public class HomeFragment extends Fragment {
                 mainProductTitle = view.findViewById(R.id.mainProductTitle);
                 buyNowButton = view.findViewById(R.id.buyNowButton);
 
+                viewMore = view.findViewById(R.id.viewMore);
+                viewMoreDiscounts = view.findViewById(R.id.viewMoreDiscounts);
+                if (viewMore != null) {
+                        viewMore.setOnClickListener(v -> {
+                                navigateToShopFragment();
+                        });
+                }
+
+                if (viewMoreDiscounts != null) {
+                        viewMoreDiscounts.setOnClickListener(v -> {
+                                navigateToShopFragment();
+                        });
+                }
 
                 // Initialize repository
                 productRepository = new ProductRepository();
@@ -134,6 +150,20 @@ public class HomeFragment extends Fragment {
                                 Intent intent = ProductDetailActivity.newIntent(requireContext(), featuredProduct);
                                 startActivity(intent);
                         });
+                }
+        }
+
+        /**
+         * Navigate to the Shop Fragment via the MainActivity's bottom navigation
+         */
+        private void navigateToShopFragment() {
+                if (getActivity() != null) {
+                        // Find the bottom navigation view in MainActivity
+                        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavMenu);
+                        if (bottomNavigationView != null) {
+                                // Select the shop menu item to trigger navigation
+                                bottomNavigationView.setSelectedItemId(R.id.shopMenu);
+                        }
                 }
         }
 }

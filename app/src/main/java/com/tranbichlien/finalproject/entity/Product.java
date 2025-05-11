@@ -70,12 +70,12 @@ public class Product {
 
     // Legacy fields
     @SerializedName("brand")
-    private String brand;
+    private String brand = "Apple";
 
     @SerializedName("price")
     private String price;
 
-    @SerializedName("rating")
+    @SerializedName("rate")
     private float rating;
 
     @SerializedName("category_id")
@@ -308,7 +308,7 @@ public class Product {
     }
 
     public String getBrand() {
-        return brand;
+        return brand = "Apple";
     }
 
     public void setBrand(String brand) {

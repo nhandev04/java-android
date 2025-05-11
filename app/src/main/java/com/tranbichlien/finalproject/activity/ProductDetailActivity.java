@@ -21,11 +21,12 @@ public class ProductDetailActivity extends AppCompatActivity {
     public static final String EXTRA_PRODUCT_BRAND = "product_brand";
     public static final String EXTRA_PRODUCT_PRICE = "product_price";
     public static final String EXTRA_PRODUCT_RATING = "product_rating";
+    public static final String EXTRA_PRODUCT_DESCRIPTION = "product_description";
     public static final String EXTRA_PRODUCT_IMAGE = "product_image";
     public static final String EXTRA_PRODUCT_IMAGE_URL = "product_image_url";
 
     private ImageView productImage;
-    private TextView productName, productBrand, productPrice;
+    private TextView productName, productBrand, productPrice, productDescription;
     private RatingBar productRating;
     private Button addToCartButton;
     private ImageButton callButton, facebookButton, mapButton, shareButton;
@@ -48,18 +49,28 @@ public class ProductDetailActivity extends AppCompatActivity {
         String name = intent.getStringExtra(EXTRA_PRODUCT_NAME);
         String brand = intent.getStringExtra(EXTRA_PRODUCT_BRAND);
         String price = intent.getStringExtra(EXTRA_PRODUCT_PRICE);
+        String description = intent.getStringExtra(EXTRA_PRODUCT_DESCRIPTION);
         float rating = intent.getFloatExtra(EXTRA_PRODUCT_RATING, 0.0f);
         String imageUrl = intent.getStringExtra(EXTRA_PRODUCT_IMAGE_URL);
         int imageResId = intent.getIntExtra(EXTRA_PRODUCT_IMAGE, R.drawable.img);
 
-        updateUIWithProductData(name, brand, price, rating, imageUrl, imageResId);
+        updateUIWithProductData(name, brand, price, description, rating, imageUrl, imageResId);
     }
 
     private void updateUIWithProductData(String name, String brand, String price,
-            float rating, String imageUrl, int imageResId) {
-        productName.setText(name);
-        productBrand.setText(brand);
-        productPrice.setText(price);
+            String description, float rating, String imageUrl, int imageResId) {
+
+        // Gán giá trị mặc định nếu dữ liệu là null hoặc rỗng
+        String displayName = (name != null && !name.isEmpty()) ? name : "Sản phẩm không tên";
+        String displayBrand = (brand != null && !brand.isEmpty()) ? brand : "Thương hiệu không xác định";
+        String displayPrice = (price != null && !price.isEmpty()) ? price : "Liên hệ để biết giá";
+        String displayDescription = (description != null && !description.isEmpty()) ? description
+                : "Chưa có mô tả cho sản phẩm này.";
+
+        productName.setText(displayName);
+        productBrand.setText(displayBrand);
+        productPrice.setText(displayPrice);
+        productDescription.setText(displayDescription);
         productRating.setRating(rating);
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -137,6 +148,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         productName = findViewById(R.id.product_detail_name);
         productBrand = findViewById(R.id.product_detail_brand);
         productPrice = findViewById(R.id.product_detail_price);
+        productDescription = findViewById(R.id.product_description);
         productRating = findViewById(R.id.product_detail_rating);
         addToCartButton = findViewById(R.id.add_to_cart_button);
         backButton = findViewById(R.id.back_button);
@@ -171,6 +183,14 @@ public class ProductDetailActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_PRODUCT_PRICE, price);
 
         intent.putExtra(EXTRA_PRODUCT_RATING, product.getRating());
+
+        // Add product description - chọn mô tả đầy đủ nếu có, nếu không thì dùng mô tả
+        // ngắn
+        String description = product.getDescription();
+        if (description == null || description.isEmpty()) {
+            description = product.getShortDescription();
+        }
+        intent.putExtra(EXTRA_PRODUCT_DESCRIPTION, description);
 
         if (product.getImageUrl() != null && !product.getImageUrl().isEmpty()) {
             intent.putExtra(EXTRA_PRODUCT_IMAGE_URL, product.getImageUrl());

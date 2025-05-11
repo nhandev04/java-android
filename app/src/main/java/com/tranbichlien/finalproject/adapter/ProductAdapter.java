@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.tranbichlien.finalproject.activity.ProductDetailActivity;
+import com.tranbichlien.finalproject.activity.AllCategoriesActivity;
 import com.tranbichlien.finalproject.R;
 import com.tranbichlien.finalproject.entity.Product;
 
@@ -44,6 +45,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.productName.setText(product.getName());
         holder.productBrand.setText(product.getBrand());
         holder.productPrice.setText(product.getSalePrice() + " đ");
+        holder.productRating.setRating(product.getRating());
         holder.productDescription.setText(product.getShortDescription());
 
         // Nếu là URL thì dùng Glide
@@ -54,14 +56,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         } else {
             // Nếu là Drawable resource thì dùng setImageResource
             holder.productImage.setImageResource(product.getImageResource());
-        }
-
-        // Set click listener to navigate to product detail
+        } // Set click listener to navigate to product detail
         holder.itemView.setOnClickListener(v -> {
             // Create intent using the helper method in ProductDetailActivity
             Intent intent = ProductDetailActivity.newIntent(context, product);
             context.startActivity(intent);
         });
+
     }
 
     @Override
@@ -73,6 +74,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         ImageView productImage;
         TextView productName, productBrand, productPrice, productDescription;
+        RatingBar productRating;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,6 +82,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             productName = itemView.findViewById(R.id.productName_singleProduct);
             productBrand = itemView.findViewById(R.id.productBrandName_singleProduct);
             productPrice = itemView.findViewById(R.id.productPrice_singleProduct);
+            productRating = itemView.findViewById(R.id.productRating_singleProduct);
             productDescription = itemView.findViewById(R.id.productDescription_singleProduct);
         }
     }
