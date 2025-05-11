@@ -23,6 +23,16 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     private Context context;
     private ArrayList<Category> categories;
+    private OnCategoryClickListener listener;
+
+    // Interface for handling item clicks
+    public interface OnCategoryClickListener {
+        void onCategoryClick(int position);
+    }
+
+    public void setOnCategoryClickListener(OnCategoryClickListener listener) {
+        this.listener = listener;
+    }
 
     public CategoryAdapter(Context context, ArrayList<Category> categories) {
         this.context = context;
@@ -38,16 +48,39 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.categoryImage.setImageResource(categories.get(position).getImageResource());
-        holder.categoryName.setText(categories.get(position).getName());
+        Category category = categories.get(position);
+        // Log category details for debugging
+        // Set category name
+        holder.categoryName.setText(category.getName());
+
+        // Check if the category has an image URL (from API) or resource ID (local)
+        if (category.getImageUrl() != null && !category.getImageUrl().isEmpty()) {
+            // Load image from URL using Glide
+            Glide.with(context)
+                    .load(category.getImageUrl())
+                    .placeholder(R.drawable.placeholder_image)
+                    .error(R.drawable.error_image)
+                    .into(holder.categoryImage);
+        } else {
+            // Use local resource image
+            holder.categoryImage.setImageResource(category.getImageResource());
+        }
 
         holder.parent.setOnClickListener(v -> {
-            // Xử lý khi nhấn vào danh mục
+            // Notify the fragment of the click through the interface
+            if (listener != null) {
+                listener.onCategoryClick(position);
+            }
+
+            // For direct navigation to detail activity, uncomment below
+            // Intent intent = CategoryDetailActivity.newIntent(context, category);
+            // context.startActivity(intent);
         });
     }
 
     @Override
     public int getItemCount() {
+        System.out.println("CategoryAdapter getItemCount: " + categories.size());
         return categories.size();
     }
 

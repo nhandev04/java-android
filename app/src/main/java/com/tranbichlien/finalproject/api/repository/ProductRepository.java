@@ -80,14 +80,24 @@ public class ProductRepository {
                     @Override
                     public void onResponse(Call<ApiResponse<List<Product>>> call,
                             Response<ApiResponse<List<Product>>> response) {
-                        if (response.isSuccessful() && response.body() != null && response.body().isStatus()) {
-                            // Filter products by category
+                        if (response.isSuccessful() && response.body() != null && response.body().isStatus()) { // Filter
+                                                                                                                // products
+                                                                                                                // by
+                                                                                                                // category
                             List<Product> allProducts = response.body().getData();
                             List<Product> filteredProducts = allProducts.stream()
-                                    .filter(product -> product.getCategories() != null &&
-                                            product.getCategories().stream()
-                                                    .map(String::toLowerCase) // Convert all categories to lowercase
-                                                    .anyMatch(category -> category.equals(categoryName.toLowerCase())))
+                                    .filter(product -> {
+                                        if (product.getCategories() == null) {
+                                            return false;
+                                        }
+                                        String lowerCaseCategoryName = categoryName != null ? categoryName.toLowerCase()
+                                                : "";
+                                        return product.getCategories().stream()
+                                                .filter(category -> category != null) // Filter out null categories
+                                                .map(category -> category.toLowerCase()) // Convert all categories to
+                                                                                         // lowercase
+                                                .anyMatch(category -> category.equals(lowerCaseCategoryName));
+                                    })
                                     .collect(Collectors.toList());
 
                             filteredProductsLiveData.setValue(filteredProducts);
@@ -123,15 +133,16 @@ public class ProductRepository {
                     public void onResponse(Call<ApiResponse<List<Product>>> call,
                             Response<ApiResponse<List<Product>>> response) {
 
-                        if (response.isSuccessful() && response.body() != null) {
-                            // Filter products by tag
+                        if (response.isSuccessful() && response.body() != null) { // Filter products by tag
                             List<Product> allProducts = response.body().getData();
                             List<Product> filteredProducts = allProducts.stream()
                                     .filter(product -> {
                                         if (product.getTags() != null) {
+                                            String lowerCaseTagName = tagName != null ? tagName.toLowerCase() : "";
                                             return product.getTags().stream()
-                                                    .map(String::toLowerCase) // Convert all tags to lowercase
-                                                    .anyMatch(tag -> tag.equals(tagName.toLowerCase()));
+                                                    .filter(tag -> tag != null) // Filter out null tags
+                                                    .map(tag -> tag.toLowerCase()) // Convert all tags to lowercase
+                                                    .anyMatch(tag -> tag.equals(lowerCaseTagName));
                                         }
                                         return false;
                                     })
@@ -153,5 +164,41 @@ public class ProductRepository {
                 });
 
         return filteredProductsLiveData;
+    }
+
+    /**
+     * Get products by category ID
+     * 
+     * @param categoryId The ID of the category
+     * @return LiveData containing the products for the specified category
+     */
+    public LiveData<List<Product>> getProductsByCategoryId(String categoryId) {
+        MutableLiveData<List<Product>> productsLiveData = new MutableLiveData<>();
+
+        // Call the API endpoint to get products by category ID
+        ApiClient.getCategoryApiService().getProductsByCategory(categoryId, null, null)
+                .enqueue(new Callback<ApiResponse<List<Product>>>() {
+                    @Override
+                    public void onResponse(Call<ApiResponse<List<Product>>> call,
+                            Response<ApiResponse<List<Product>>> response) {
+                        if (response.isSuccessful() && response.body() != null && response.body().isStatus()) {
+                            // Get products from response
+                            List<Product> products = response.body().getData();
+                            productsLiveData.setValue(products);
+                        } else {
+                            // Handle error
+                            productsLiveData.setValue(new ArrayList<>());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiResponse<List<Product>>> call, Throwable t) {
+                        // Handle failure
+                        t.printStackTrace();
+                        productsLiveData.setValue(new ArrayList<>());
+                    }
+                });
+
+        return productsLiveData;
     }
 }
