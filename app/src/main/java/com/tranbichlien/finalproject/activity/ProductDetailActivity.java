@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.tranbichlien.finalproject.entity.Product;
 import com.tranbichlien.finalproject.R;
+import com.tranbichlien.finalproject.util.StorageUtils;
 
 public class ProductDetailActivity extends AppCompatActivity {
     private static final String PHONE_NUMBER = "tel:0123456789";
@@ -24,6 +25,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     public static final String EXTRA_PRODUCT_DESCRIPTION = "product_description";
     public static final String EXTRA_PRODUCT_IMAGE = "product_image";
     public static final String EXTRA_PRODUCT_IMAGE_URL = "product_image_url";
+    public static final String EXTRA_PRODUCT_ID = "product_id";
 
     private ImageView productImage;
     private TextView productName, productBrand, productPrice, productDescription;
@@ -31,6 +33,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private Button addToCartButton;
     private ImageButton callButton, facebookButton, mapButton, shareButton;
     private ImageView backButton;
+    private String productId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,12 @@ public class ProductDetailActivity extends AppCompatActivity {
         float rating = intent.getFloatExtra(EXTRA_PRODUCT_RATING, 0.0f);
         String imageUrl = intent.getStringExtra(EXTRA_PRODUCT_IMAGE_URL);
         int imageResId = intent.getIntExtra(EXTRA_PRODUCT_IMAGE, R.drawable.img);
+        productId = intent.getStringExtra(EXTRA_PRODUCT_ID);
+
+        // If no ID is provided, use the product name as ID
+        if (productId == null || productId.isEmpty()) {
+            productId = name;
+        }
 
         updateUIWithProductData(name, brand, price, description, rating, imageUrl, imageResId);
     }
@@ -80,11 +89,34 @@ public class ProductDetailActivity extends AppCompatActivity {
         } else {
             productImage.setImageResource(imageResId);
         }
+
+        // Update the "Add to Cart" button text based on whether the product is already
+        // in the cart
+        updateCartButtonState();
+    }
+
+    private void updateCartButtonState() {
+        if (StorageUtils.isInCart(this, productId)) {
+            addToCartButton.setText("Remove from Cart");
+        } else {
+            addToCartButton.setText("Add to Cart");
+        }
     }
 
     private void setupClickListeners() {
         backButton.setOnClickListener(v -> finish());
-        addToCartButton.setOnClickListener(v -> finish());
+
+        addToCartButton.setOnClickListener(v -> {
+            if (StorageUtils.isInCart(this, productId)) {
+                StorageUtils.removeFromCart(this, productId);
+                showToast("Product removed from cart");
+            } else {
+                StorageUtils.addToCart(this, productId);
+                showToast("Product added to cart");
+            }
+            updateCartButtonState();
+        });
+
         callButton.setOnClickListener(v -> handleCallButton());
         facebookButton.setOnClickListener(v -> handleFacebookButton());
         mapButton.setOnClickListener(v -> handleMapButton());
@@ -120,8 +152,9 @@ public class ProductDetailActivity extends AppCompatActivity {
             if (mapIntent.resolveActivity(getPackageManager()) != null) {
                 startActivity(mapIntent);
             } else {
-                String mapWebUrl = "https://maps.google.com/?q=" + DEFAULT_MAP_COORDINATES;
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(mapWebUrl)));
+                Uri gmmIntentUri = Uri.parse("https://maps.google.com/?q=" + DEFAULT_MAP_COORDINATES);
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                startActivity(browserIntent);
             }
         } catch (Exception e) {
             showToast("Could not open maps");
@@ -191,6 +224,11 @@ public class ProductDetailActivity extends AppCompatActivity {
             description = product.getShortDescription();
         }
         intent.putExtra(EXTRA_PRODUCT_DESCRIPTION, description);
+
+        // Pass product ID if available
+        if (product.getId() != null) {
+            intent.putExtra(EXTRA_PRODUCT_ID, product.getId());
+        }
 
         if (product.getImageUrl() != null && !product.getImageUrl().isEmpty()) {
             intent.putExtra(EXTRA_PRODUCT_IMAGE_URL, product.getImageUrl());

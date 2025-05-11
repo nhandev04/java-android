@@ -17,6 +17,7 @@ import com.tranbichlien.finalproject.activity.ProductDetailActivity;
 import com.tranbichlien.finalproject.activity.AllCategoriesActivity;
 import com.tranbichlien.finalproject.R;
 import com.tranbichlien.finalproject.entity.Product;
+import com.tranbichlien.finalproject.util.StorageUtils;
 
 import java.util.ArrayList;
 
@@ -44,9 +45,26 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         Product product = products.get(position);
         holder.productName.setText(product.getName());
         holder.productBrand.setText(product.getBrand());
-        holder.productPrice.setText(product.getSalePrice() + " đ");
+
+        // Handle different product price formats
+        if (product.getSalePrice() > 0) {
+            holder.productPrice.setText(String.format("%,.0f đ", product.getSalePrice()));
+        } else {
+            holder.productPrice.setText("Liên hệ");
+        }
+
         holder.productRating.setRating(product.getRating());
-        holder.productDescription.setText(product.getShortDescription()); // Nếu là URL thì dùng Glide
+
+        // Use short description if available, otherwise use regular description with
+        // limit
+        if (product.getShortDescription() != null && !product.getShortDescription().isEmpty()) {
+            holder.productDescription.setText(product.getShortDescription());
+        } else if (product.getDescription() != null) {
+            String desc = product.getDescription();
+            holder.productDescription.setText(desc.length() > 50 ? desc.substring(0, 50) + "..." : desc);
+        } else {
+            holder.productDescription.setText("");
+        } // Nếu là URL thì dùng Glide
         if (product.getImageUrl() != null) {
             // Add enhanced image loading with support for all image formats
             Glide.with(holder.productImage.getContext())
@@ -68,13 +86,35 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         } else {
             // Nếu là Drawable resource thì dùng setImageResource
             holder.productImage.setImageResource(product.getImageResource());
-        } // Set click listener to navigate to product detail
+        }
+
+        // Set up favorite functionality
+        String productId = product.getId() != null ? product.getId() : product.getName();
+        boolean isFavorite = StorageUtils.isInFavorites(context, productId);
+
+        // Update favorite icon based on status
+        updateFavoriteIcon(holder.productAddToFav, isFavorite);
+
+        // Set click listener on the favorite icon
+        holder.productAddToFav.setOnClickListener(v -> {
+            boolean isNowFavorite = StorageUtils.toggleFavorite(context, productId);
+            updateFavoriteIcon(holder.productAddToFav, isNowFavorite);
+        });
+
+        // Set click listener to navigate to product detail
         holder.itemView.setOnClickListener(v -> {
             // Create intent using the helper method in ProductDetailActivity
             Intent intent = ProductDetailActivity.newIntent(context, product);
             context.startActivity(intent);
         });
+    }
 
+    private void updateFavoriteIcon(ImageView favoriteIcon, boolean isFavorite) {
+        if (isFavorite) {
+            favoriteIcon.setColorFilter(context.getResources().getColor(R.color.red));
+        } else {
+            favoriteIcon.setColorFilter(context.getResources().getColor(R.color.mainText));
+        }
     }
 
     @Override
@@ -85,6 +125,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView productImage;
+        ImageView productAddToFav;
         TextView productName, productBrand, productPrice, productDescription;
         RatingBar productRating;
 
@@ -96,6 +137,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             productPrice = itemView.findViewById(R.id.productPrice_singleProduct);
             productRating = itemView.findViewById(R.id.productRating_singleProduct);
             productDescription = itemView.findViewById(R.id.productDescription_singleProduct);
+            productAddToFav = itemView.findViewById(R.id.productAddToFav_singleProduct);
         }
     }
 }
