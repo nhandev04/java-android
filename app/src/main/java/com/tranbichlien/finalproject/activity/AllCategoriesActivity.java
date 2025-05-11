@@ -69,12 +69,10 @@ public class AllCategoriesActivity extends AppCompatActivity {
         categoryAdapter = new CategoryAdapter(this, categories);
         categoriesRecyclerView.setAdapter(categoryAdapter);
 
-        // Set click listener
-        categoryAdapter.setOnCategoryClickListener(position -> {
-            Category selectedCategory = categories.get(position);
-            Intent intent = CategoryDetailActivity.newIntent(this, selectedCategory);
-            startActivity(intent);
-        });
+        // No need to set click listener as the adapter will handle navigation directly
+        // When clicked, CategoryAdapter will create an intent with the selected
+        // category
+        // and start the CategoryDetailActivity with proper parameters
     }
 
     private void loadCategories() {

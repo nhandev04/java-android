@@ -26,9 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryDetailActivity extends AppCompatActivity {
-
     private ImageView backButton;
     private TextView categoryTitleTextView;
+    private TextView categoryDescriptionTextView;
     private RecyclerView productsRecyclerView;
     private ProgressBar progressBar;
     private CategoryRepository categoryRepository;
@@ -40,6 +40,7 @@ public class CategoryDetailActivity extends AppCompatActivity {
     public static final String EXTRA_CATEGORY_IMAGE = "category_image";
     public static final String EXTRA_CATEGORY_ID = "category_id";
     public static final String EXTRA_CATEGORY_IMAGE_URL = "category_image_url";
+    public static final String EXTRA_CATEGORY_DESCRIPTION = "category_description";
 
     private String categoryId;
     private String categoryName;
@@ -50,19 +51,26 @@ public class CategoryDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_category_detail);
 
         // Initialize views
-        initViews();
-
-        // Get data from intent
+        initViews(); // Get data from intent
         Intent intent = getIntent();
         if (intent != null) {
             categoryName = intent.getStringExtra(EXTRA_CATEGORY_NAME);
             categoryId = intent.getStringExtra(EXTRA_CATEGORY_ID);
             String imageUrl = intent.getStringExtra(EXTRA_CATEGORY_IMAGE_URL);
             int imageResource = intent.getIntExtra(EXTRA_CATEGORY_IMAGE, 0);
+            String categoryDescription = intent.getStringExtra(EXTRA_CATEGORY_DESCRIPTION);
 
             // Set category name as title
             if (categoryName != null) {
                 categoryTitleTextView.setText(categoryName);
+
+                // Set category description if available
+                if (categoryDescription != null && !categoryDescription.isEmpty()) {
+                    categoryDescriptionTextView.setText(categoryDescription);
+                    categoryDescriptionTextView.setVisibility(View.VISIBLE);
+                } else {
+                    categoryDescriptionTextView.setVisibility(View.GONE);
+                }
 
                 // Load category image if available
                 if (categoryImageView != null) {
@@ -91,10 +99,10 @@ public class CategoryDetailActivity extends AppCompatActivity {
 
                 // Load products for this category
                 if (categoryId != null && !categoryId.isEmpty()) {
-                    // If we have a category ID, use it for API call
-                    loadProductsByCategoryId(categoryId);
+                    // data for demo purposes, note change when editing
+                    loadProductsForCategory(categoryName);
                 } else {
-                    // Otherwise use category name
+                    // data for demo purposes, note change when editing
                     loadProductsForCategory(categoryName);
                 }
             }
@@ -107,6 +115,7 @@ public class CategoryDetailActivity extends AppCompatActivity {
     private void initViews() {
         backButton = findViewById(R.id.back_button);
         categoryTitleTextView = findViewById(R.id.category_title);
+        categoryDescriptionTextView = findViewById(R.id.category_description);
         productsRecyclerView = findViewById(R.id.products_recycler_view);
         progressBar = findViewById(R.id.progressBar);
         categoryImageView = findViewById(R.id.category_image);
@@ -142,7 +151,6 @@ public class CategoryDetailActivity extends AppCompatActivity {
     private void loadProductsForCategory(String categoryName) {
         // Show progress bar while loading
         progressBar.setVisibility(View.VISIBLE);
-
         // Use the CategoryRepository to fetch products by category name
         productRepository.getProductByCategory(categoryName)
                 .observe(this, new Observer<List<Product>>() {
@@ -180,37 +188,6 @@ public class CategoryDetailActivity extends AppCompatActivity {
      * @param categoryName The name of the category
      */
     private void loadSampleProductsForCategory(String categoryName) {
-        // Create a list of products for the selected category
-        ArrayList<Product> products = new ArrayList<>();
-
-        // // Add sample products based on category
-        // if (categoryName.equals("Điện thoại") || categoryName.equals("iPhones")) {
-        // products.add(new Product("Apple", "iPhone 14 Pro Max", "25,000,000", 5.0f,
-        // "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        // products.add(new Product("Samsung", "Galaxy S23+", "20,000,000", 5.0f,
-        // "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        // } else if (categoryName.equals("Laptop") || categoryName.equals("MacBooks"))
-        // {
-        // products.add(new Product("Apple", "MacBook Pro", "30,000,000", 4.8f,
-        // "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        // products.add(new Product("Dell", "XPS 13", "25,000,000", 4.7f,
-        // "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        // } else if (categoryName.equals("Tablet") || categoryName.equals("iPads")) {
-        // products.add(new Product("Apple", "iPad Pro", "20,000,000", 4.9f,
-        // "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        // products.add(new Product("Samsung", "Galaxy Tab S7", "15,000,000", 4.6f,
-        // "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        // } else {
-        // // Generic products for other categories
-        // products.add(new Product("Brand", "Product 1", "10,000,000", 4.5f,
-        // "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        // products.add(new Product("Brand", "Product 2", "15,000,000", 4.3f,
-        // "https://minhtuanmobile.com/uploads/products/241207030434-4.webp"));
-        // }
-
-        // Set adapter if there are products
-        ProductAdapter productAdapter = new ProductAdapter(this, products);
-        productsRecyclerView.setAdapter(productAdapter);
     }
 
     /**
@@ -220,8 +197,15 @@ public class CategoryDetailActivity extends AppCompatActivity {
      */
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    } // Static method to create intent for this activity
+    }
 
+    /**
+     * Static method to create intent for this activity
+     * 
+     * @param context  The context
+     * @param category The category to display
+     * @return Intent with category data
+     */
     public static Intent newIntent(Context context, Category category) {
         Intent intent = new Intent(context, CategoryDetailActivity.class);
 
@@ -232,6 +216,11 @@ public class CategoryDetailActivity extends AppCompatActivity {
 
         if (category.getName() != null) {
             intent.putExtra(EXTRA_CATEGORY_NAME, category.getName());
+        }
+
+        // Add category description if available
+        if (category.getDescription() != null) {
+            intent.putExtra(EXTRA_CATEGORY_DESCRIPTION, category.getDescription());
         }
 
         // Only add image resource if it's valid (non-zero)

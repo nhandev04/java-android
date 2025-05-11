@@ -70,16 +70,16 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             // Use local resource image
             holder.categoryImage.setImageResource(category.getImageResource());
         }
-
         holder.parent.setOnClickListener(v -> {
-            // Notify the fragment of the click through the interface
+            // Notify the fragment of the click through the interface if set
             if (listener != null) {
                 listener.onCategoryClick(position);
+            } else {
+                // Direct navigation to CategoryDetailActivity if no listener is set
+                // (This will be used in the AllCategoriesActivity)
+                Intent intent = CategoryDetailActivity.newIntent(context, category);
+                context.startActivity(intent);
             }
-
-            // For direct navigation to detail activity, uncomment below
-            // Intent intent = CategoryDetailActivity.newIntent(context, category);
-            // context.startActivity(intent);
         });
     }
 
