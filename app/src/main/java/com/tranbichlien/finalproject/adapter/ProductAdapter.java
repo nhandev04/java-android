@@ -46,13 +46,25 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.productBrand.setText(product.getBrand());
         holder.productPrice.setText(product.getSalePrice() + " đ");
         holder.productRating.setRating(product.getRating());
-        holder.productDescription.setText(product.getShortDescription());
-
-        // Nếu là URL thì dùng Glide
+        holder.productDescription.setText(product.getShortDescription()); // Nếu là URL thì dùng Glide
         if (product.getImageUrl() != null) {
+            // Add enhanced image loading with support for all image formats
             Glide.with(holder.productImage.getContext())
                     .load(product.getImageUrl())
+                    .placeholder(R.drawable.placeholder_image)
+                    .error(R.drawable.error_image)
+                    .timeout(10000) // 10 seconds timeout for slow connections
                     .into(holder.productImage);
+
+            // Log the image format being loaded
+            String imageUrl = product.getImageUrl();
+            String extension = "unknown";
+            int dotIndex = imageUrl.lastIndexOf('.');
+            if (dotIndex > 0) {
+                extension = imageUrl.substring(dotIndex + 1).toLowerCase();
+            }
+            android.util.Log.d("ProductAdapter", "Loading product image: " + imageUrl +
+                    " (format: " + extension + ") for product: " + product.getName());
         } else {
             // Nếu là Drawable resource thì dùng setImageResource
             holder.productImage.setImageResource(product.getImageResource());

@@ -2,9 +2,10 @@ package com.tranbichlien.finalproject.entity;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Product {
+public class Product implements Serializable {
     @SerializedName("id")
     private String id;
 
@@ -87,7 +88,7 @@ public class Product {
     private int imageResource; // For drawable resource (local only)
 
     // Inner class for gallery object
-    public static class Gallery {
+    public static class Gallery implements Serializable {
         @SerializedName("createdAt")
         private String createdAt;
 
@@ -156,7 +157,7 @@ public class Product {
     }
 
     // Inner class for createdBy object
-    public static class CreatedBy {
+    public static class CreatedBy implements Serializable {
         @SerializedName("id")
         private String id;
 

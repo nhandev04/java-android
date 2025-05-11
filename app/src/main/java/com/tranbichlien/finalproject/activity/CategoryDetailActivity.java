@@ -67,11 +67,21 @@ public class CategoryDetailActivity extends AppCompatActivity {
                 // Load category image if available
                 if (categoryImageView != null) {
                     if (imageUrl != null && !imageUrl.isEmpty()) {
-                        // Load image from URL using Glide
+                        // Log the image format being loaded
+                        String extension = "unknown";
+                        int dotIndex = imageUrl.lastIndexOf('.');
+                        if (dotIndex > 0) {
+                            extension = imageUrl.substring(dotIndex + 1).toLowerCase();
+                        }
+                        android.util.Log.d("CategoryDetailActivity", "Loading category image: " + imageUrl +
+                                " (format: " + extension + ") for category: " + categoryName);
+
+                        // Load image from URL using Glide with enhanced settings for all image formats
                         Glide.with(this)
                                 .load(imageUrl)
                                 .placeholder(R.drawable.placeholder_image)
                                 .error(R.drawable.error_image)
+                                .timeout(10000) // 10 seconds timeout for slow connections
                                 .into(categoryImageView);
                     } else if (imageResource != 0) {
                         // Use local resource image

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.tranbichlien.finalproject.R;
 import com.tranbichlien.finalproject.activity.AllCategoriesActivity;
 import com.tranbichlien.finalproject.activity.CategoryDetailActivity;
+import com.tranbichlien.finalproject.activity.CategoryItemListActivity;
 import com.tranbichlien.finalproject.adapter.CategoryAdapter;
 import com.tranbichlien.finalproject.adapter.ProductAdapter;
 import com.tranbichlien.finalproject.api.repository.CategoryRepository;
@@ -97,6 +98,11 @@ public class ShopFragment extends Fragment {
             productProgressBar = new ProgressBar(getContext());
             productProgressBar.setVisibility(View.GONE);
         }
+
+        // Initially hide the productsViewAll button until products are loaded
+        if (productsViewAll != null) {
+            productsViewAll.setVisibility(View.GONE);
+        }
     }
 
     private void setupRecyclerViews() {
@@ -111,6 +117,7 @@ public class ShopFragment extends Fragment {
         // Set up product RecyclerView
         productsRecView.setAdapter(productAdapter);
         productsRecView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+
         // Set OnItemClickListener for categories
         categoryAdapter.setOnCategoryClickListener(position -> {
             if (position >= 0 && position < categories.size()) {
@@ -119,12 +126,25 @@ public class ShopFragment extends Fragment {
                 // Safely get category name
                 String categoryName = selectedCategory != null ? selectedCategory.getName() : null;
 
+                // If "All" category selected, load all products and reset filter
+                if (categoryName != null && categoryName.equals("All")) {
+                    selectedCategory = null;
+                    loadAllProducts();
+                    productsViewAll.setText("Xem thêm");
+                    return;
+                }
+
+                // Show progress indicator
+                if (productProgressBar != null) {
+                    productProgressBar.setVisibility(View.VISIBLE);
+                }
+
                 // Update the products view with filtered products
                 loadProductsByCategory(categoryName);
 
                 // Update "View All" button to show the selected category name
                 if (categoryName != null && !categoryName.isEmpty()) {
-                    productsViewAll.setText("Xem thêm " + categoryName);
+                    productsViewAll.setText("Xem thêm ");
                 } else {
                     productsViewAll.setText("Xem thêm");
                 }
@@ -138,17 +158,24 @@ public class ShopFragment extends Fragment {
             Intent intent = new Intent(getActivity(), AllCategoriesActivity.class);
             startActivity(intent);
         });
-
         productsViewAll.setOnClickListener(v -> {
             if (selectedCategory != null) {
-                // Navigate to CategoryDetailActivity with the selected category
-                Intent intent = CategoryDetailActivity.newIntent(getContext(), selectedCategory);
+                // Navigate to CategoryItemListActivity with the selected category and filtered
+                // products
+                Intent intent = CategoryItemListActivity.newIntent(
+                        getContext(),
+                        selectedCategory,
+                        new ArrayList<>(products) // Pass the already filtered products
+                );
                 startActivity(intent);
             } else {
                 // No category selected, show all products
                 Toast.makeText(getContext(), "Hiển thị tất cả sản phẩm", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getActivity(), CategoryDetailActivity.class);
-                intent.putExtra(CategoryDetailActivity.EXTRA_CATEGORY_NAME, "Tất cả sản phẩm");
+                Intent intent = CategoryItemListActivity.newIntent(
+                        getContext(),
+                        "Tất cả sản phẩm",
+                        new ArrayList<>(products) // Pass all products
+                );
                 startActivity(intent);
             }
         });
@@ -175,8 +202,15 @@ public class ShopFragment extends Fragment {
                 }
 
                 if (apiCategories != null && !apiCategories.isEmpty()) {
-                    // Clear existing categories and add new ones
+                    // Clear existing categories
                     categories.clear();
+
+                    // Add "All" category first to reset filter
+                    Category allCategory = new Category("All", R.drawable.apple_logo);
+                    allCategory.setDescription("All products available");
+                    categories.add(allCategory);
+
+                    // Now add API categories
                     categories.addAll(apiCategories);
 
                     // Notify adapter of data change
@@ -190,72 +224,18 @@ public class ShopFragment extends Fragment {
     }
 
     private void loadSampleCategories() {
-        // Sample categories based on API format from user prompt
-        categories.clear();
 
-        // // Fixed URL for iPhone images
-        // String iphoneImageUrl =
-        // "https://minhtuanmobile.com/uploads/products/241207030434-4.webp";
-
-        // // iPhone category based on the actual API response format
-        // Category iPhoneCategory = new Category(
-        // "14668943-d510-4b12-9dea-e55382eab507",
-        // "iPhones",
-        // "Latest Apple iPhone models and series.",
-        // iphoneImageUrl);
-        // iPhoneCategory.setIcon(iphoneImageUrl);
-        // iPhoneCategory.setPlaceholder(iphoneImageUrl);
-        // iPhoneCategory.setActive(true);
-        // iPhoneCategory.setCreatedAt("2025-05-05T02:42:24Z");
-        // iPhoneCategory.setUpdatedAt("2025-05-05T02:42:24Z");
-        // categories.add(iPhoneCategory); // Other categories with separate image URLs
-        // for each category
-        // String macbookImageUrl =
-        // "https://minhtuanmobile.com/uploads/products/mbp-spacegray-gallery1-202310.webp";
-        // String ipadImageUrl =
-        // "https://minhtuanmobile.com/uploads/products/ipad-pro-m4-silver-gallery-1-240507.webp";
-        // String watchImageUrl =
-        // "https://minhtuanmobile.com/uploads/products/apple-watch-series-10-46mm-gps-jet-black-aluminum-sport-loop-ink-pdp-image-position-1-vn-vi-240910022744.jpg";
-        // String airpodsImageUrl =
-        // "https://minhtuanmobile.com/uploads/products/airpods-pro-2-charge-via-usb-c-pdp-image-gallery-1-202309.webp";
-        // String accessoriesImageUrl =
-        // "https://minhtuanmobile.com/uploads/products/MN6J3_VW_34FRwatch-44-alum-midnight-nc-se_VW_34FR_WF_CO_GEO_VN.jpg";
-
-        // categories.add(new Category(
-        // "24668943-d510-4b12-9dea-e55382eab508",
-        // "MacBooks",
-        // "Premium Apple laptop computers.",
-        // macbookImageUrl));
-        // categories.add(new Category(
-        // "34668943-d510-4b12-9dea-e55382eab509",
-        // "iPads",
-        // "Apple tablet devices for every need.",
-        // ipadImageUrl));
-        // categories.add(new Category(
-        // "44668943-d510-4b12-9dea-e55382eab510",
-        // "Apple Watches",
-        // "Smart watches with health and fitness features.",
-        // watchImageUrl));
-        // categories.add(new Category(
-        // "54668943-d510-4b12-9dea-e55382eab511",
-        // "AirPods",
-        // "Wireless earbuds and headphones.",
-        // airpodsImageUrl));
-        // categories.add(new Category(
-        // "64668943-d510-4b12-9dea-e55382eab512",
-        // "Accessories",
-        // "Cases, chargers, and other Apple accessories.",
-        // accessoriesImageUrl));
-
-        categoryAdapter.notifyDataSetChanged();
-        // Toast.makeText(getContext(), "Sử dụng dữ liệu mẫu do không thể tải từ API",
-        // Toast.LENGTH_SHORT).show();
     }
 
     private void loadAllProducts() {
         // Show progress bar
         if (productProgressBar != null) {
             productProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        // Hide productsViewAll until we confirm products are available
+        if (productsViewAll != null) {
+            productsViewAll.setVisibility(View.GONE);
         }
 
         // Load all products from API
@@ -275,6 +255,11 @@ public class ShopFragment extends Fragment {
 
                             // Notify adapter of data change
                             productAdapter.notifyDataSetChanged();
+
+                            // Show productsViewAll when products are available
+                            if (productsViewAll != null) {
+                                productsViewAll.setVisibility(View.VISIBLE);
+                            }
                         } else {
                             // If API fails or returns empty data, load sample products
                             loadSampleProducts();
@@ -287,6 +272,11 @@ public class ShopFragment extends Fragment {
         // Show progress bar
         if (productProgressBar != null) {
             productProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        // Hide productsViewAll until we confirm products are available
+        if (productsViewAll != null) {
+            productsViewAll.setVisibility(View.GONE);
         }
 
         // Check if category name is null or empty
@@ -313,6 +303,11 @@ public class ShopFragment extends Fragment {
 
                             // Notify adapter of data change
                             productAdapter.notifyDataSetChanged();
+
+                            // Show productsViewAll when products are available
+                            if (productsViewAll != null) {
+                                productsViewAll.setVisibility(View.VISIBLE);
+                            }
                         } else {
                             // If API fails or returns empty data, show message
                             String message = "Không tìm thấy sản phẩm";
@@ -329,73 +324,10 @@ public class ShopFragment extends Fragment {
     }
 
     private void loadSampleProducts() {
-        // Sample products as fallback with distinct, valid image URLs
-        products.clear();
 
-        // Use distinct image URLs for each product
-        // String iphone14ImageUrl =
-        // "https://minhtuanmobile.com/uploads/products/iphone-15pro-natural-gallery-1-202309.webp";
-        // String samsung23ImageUrl =
-        // "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-pro-finish-select-202209-6-7inch-deeppurple?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1663703841896";
-        // String iphone11ImageUrl =
-        // "https://minhtuanmobile.com/uploads/products/iphone-15-pink-gallery-1-202309.webp";
-        // String galaxys20ImageUrl =
-        // "https://minhtuanmobile.com/uploads/products/galaxy-s24-ultra-titanium-gray-pure-back-s-pen-221011.webp";
-
-        // products.add(new Product("Apple", "iPhone 14 Pro Max", "25,000,000", 5.0f,
-        // iphone14ImageUrl));
-        // products.add(new Product("Samsung", "Galaxy S23+", "20,000,000", 5.0f,
-        // samsung23ImageUrl));
-        // products.add(new Product("Apple", "iPhone 11", "10,000,000", 4.5f,
-        // iphone11ImageUrl));
-        // products.add(new Product("Samsung", "Galaxy S20", "15,000,000", 4.5f,
-        // galaxys20ImageUrl));
-
-        productAdapter.notifyDataSetChanged();
     }
 
     private void loadSampleProductsForCategory(String categoryName) {
-        products.clear();
 
-        // // Define image URLs for products
-        // String iphone14ImageUrl =
-        // "https://minhtuanmobile.com/uploads/products/iphone-15pro-natural-gallery-1-202309.webp";
-        // String iphone13ImageUrl =
-        // "https://minhtuanmobile.com/uploads/products/iphone-15-pink-gallery-1-202309.webp";
-        // String samsungImageUrl =
-        // "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-pro-finish-select-202209-6-7inch-deeppurple?wid=5120&hei=2880&fmt=p-jpg&qlt=80&.v=1663703841896";
-        // String galaxyImageUrl =
-        // "https://minhtuanmobile.com/uploads/products/galaxy-s24-ultra-titanium-gray-pure-back-s-pen-221011.webp";
-        // String macbookProUrl =
-        // "https://minhtuanmobile.com/uploads/products/mbp-spacegray-gallery1-202310.webp";
-        // String macbookAirUrl =
-        // "https://minhtuanmobile.com/uploads/products/macbook-air-m3-15-midnight-gallery-1-240307.webp";
-
-        // // Add sample products based on category
-        // if (categoryName == null) {
-        // // Default products if category name is null
-        // products.add(new Product("Apple", "iPhone 14 Pro Max", "25,000,000", 5.0f,
-        // iphone14ImageUrl));
-        // products.add(new Product("Samsung", "Galaxy S23+", "20,000,000", 5.0f,
-        // samsungImageUrl));
-        // } else if ("iPhones".equals(categoryName)) {
-        // products.add(new Product("Apple", "iPhone 14 Pro Max", "25,000,000", 5.0f,
-        // iphone14ImageUrl));
-        // products.add(new Product("Apple", "iPhone 13", "20,000,000", 4.8f,
-        // iphone13ImageUrl));
-        // } else if ("MacBooks".equals(categoryName)) {
-        // products.add(new Product("Apple", "MacBook Pro", "30,000,000", 4.8f,
-        // macbookProUrl));
-        // products.add(new Product("Apple", "MacBook Air", "25,000,000", 4.7f,
-        // macbookAirUrl));
-        // } else {
-        // // Generic products for other categories
-        // products.add(new Product("Samsung", "Galaxy S23+", "20,000,000", 5.0f,
-        // samsungImageUrl));
-        // products.add(new Product("Samsung", "Galaxy S20", "15,000,000", 4.5f,
-        // galaxyImageUrl));
-        // }
-
-        productAdapter.notifyDataSetChanged();
     }
 }

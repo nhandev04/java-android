@@ -51,16 +51,21 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         Category category = categories.get(position);
         // Log category details for debugging
         // Set category name
-        holder.categoryName.setText(category.getName());
-
-        // Check if the category has an image URL (from API) or resource ID (local)
+        holder.categoryName.setText(category.getName()); // Check if the category has an image URL (from API) or
+                                                         // resource ID (local)
         if (category.getImageUrl() != null && !category.getImageUrl().isEmpty()) {
-            // Load image from URL using Glide
+            // Load image from URL using Glide with enhanced settings for all image formats
             Glide.with(context)
                     .load(category.getImageUrl())
                     .placeholder(R.drawable.placeholder_image)
                     .error(R.drawable.error_image)
+                    .timeout(10000) // 10 seconds timeout for slow connections
                     .into(holder.categoryImage);
+
+            // Log the image being loaded for debugging
+            String imageUrl = category.getImageUrl();
+            android.util.Log.d("CategoryAdapter", "Loading image: " + imageUrl +
+                    " for category: " + category.getName());
         } else {
             // Use local resource image
             holder.categoryImage.setImageResource(category.getImageResource());
@@ -80,7 +85,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        System.out.println("CategoryAdapter getItemCount: " + categories.size());
         return categories.size();
     }
 

@@ -38,9 +38,10 @@
         <activity android:name=".activity.OrdersActivity" android:exported="true" />
         <activity android:name=".activity.AddressActivity" android:exported="true" />
         <activity android:name=".activity.PaymentMethodActivity" android:exported="true" />        
-        <activity android:name=".activity.CouponsActivity" android:exported="true" />
-        <activity android:name=".activity.SettingsActivity" android:exported="true" />
+        <activity android:name=".activity.CouponsActivity" android:exported="true" />        <activity android:name=".activity.SettingsActivity" android:exported="true" />
         <activity android:name=".activity.AllCategoriesActivity" android:exported="true" />
+        <activity android:name=".activity.CategoryDetailActivity" android:exported="true" />
+        <activity android:name=".activity.CategoryItemListActivity" android:exported="true" />
 
     </application>
 
