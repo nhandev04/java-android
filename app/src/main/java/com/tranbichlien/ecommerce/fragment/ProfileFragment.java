@@ -44,12 +44,31 @@ public class ProfileFragment extends Fragment {
         // Initialize views
         initViews(view);
 
-        // Set sample data for profile
-        profileName.setText("Trần Bích Liên");
-        profileEmail.setText("bichlienne@gmail.com");
+        // Load user data from storage
+        loadUserData();
 
         // Set click listeners for all sections
         setupClickListeners();
+    }
+
+    /**
+     * Load user data from storage and update UI
+     */
+    private void loadUserData() {
+        if (getContext() == null) return;
+
+        // Get user data from storage
+        com.tranbichlien.ecommerce.entity.User user = com.tranbichlien.ecommerce.util.StorageUtils.getUserData(getContext());
+
+        if (user != null) {
+            // Set user data to UI
+            profileName.setText(user.getFullName());
+            profileEmail.setText(user.getEmail());
+        } else {
+            // Set default data if user data is not available
+            profileName.setText("Guest User");
+            profileEmail.setText("Not logged in");
+        }
     }
 
     private void initViews(View view) {

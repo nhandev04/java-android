@@ -13,6 +13,11 @@ public class ApiConstants {
     public static final String ENDPOINT_USERS = "users";
     public static final String ENDPOINT_ORDERS = "orders";
 
+    // Authentication endpoints
+    public static final String ENDPOINT_AUTH = "auth/user";
+    public static final String ENDPOINT_LOGIN = ENDPOINT_AUTH + "/login";
+    public static final String ENDPOINT_CURRENT_USER = ENDPOINT_AUTH + "/me";
+
     // Request parameters
     public static final String PARAM_PAGE = "page";
     public static final String PARAM_LIMIT = "limit";

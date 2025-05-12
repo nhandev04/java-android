@@ -7,6 +7,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.tranbichlien.ecommerce.api.model.ApiResponse;
+import com.tranbichlien.ecommerce.api.service.AuthApiService;
 import com.tranbichlien.ecommerce.api.service.CategoryApiService;
 import com.tranbichlien.ecommerce.api.service.ProductApiService;
 import com.tranbichlien.ecommerce.api.service.TagApiService;
@@ -61,12 +62,31 @@ public class ApiClient {
                     // Return the raw response which will be implicitly cast to ApiResponse<?>
                     return rawResponse;
                 }
-                // If response is a JSON object, handle normally
+                // If response is a JSON object, handle manually to avoid recursion
                 else if (json.isJsonObject()) {
                     try {
-                        // Try standard deserialization first
-                        return context.deserialize(json, typeOfT);
-                    } catch (JsonParseException e) {
+                        // Manually extract fields from JSON to avoid recursion
+                        if (json.getAsJsonObject().has("status")) {
+                            rawResponse.setStatus(json.getAsJsonObject().get("status").getAsBoolean());
+                        }
+
+                        if (json.getAsJsonObject().has("message")) {
+                            rawResponse.setMessage(json.getAsJsonObject().get("message").getAsString());
+                        }
+
+                        if (json.getAsJsonObject().has("data") && !json.getAsJsonObject().get("data").isJsonNull()) {
+                            if (dataType != null) {
+                                rawResponse.setData(context.deserialize(json.getAsJsonObject().get("data"), dataType));
+                            }
+                        }
+
+                        if (json.getAsJsonObject().has("pagination") && !json.getAsJsonObject().get("pagination").isJsonNull()) {
+                            rawResponse.setPagination(context.deserialize(json.getAsJsonObject().get("pagination"), 
+                                ApiResponse.Pagination.class));
+                        }
+
+                        return rawResponse;
+                    } catch (Exception e) {
                         // Create default empty response if parsing fails
                         rawResponse.setStatus(false);
                         rawResponse.setData(createEmptyResponseData(dataType));
@@ -191,5 +211,14 @@ public class ApiClient {
      */
     public static TagApiService getTagApiService() {
         return getRetrofit().create(TagApiService.class);
+    }
+
+    /**
+     * Get the AuthApiService instance
+     * 
+     * @return The AuthApiService instance
+     */
+    public static AuthApiService getAuthApiService() {
+        return getRetrofit().create(AuthApiService.class);
     }
 }

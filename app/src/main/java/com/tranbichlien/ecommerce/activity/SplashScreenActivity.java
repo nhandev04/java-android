@@ -7,6 +7,7 @@ import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.tranbichlien.ecommerce.R;
+import com.tranbichlien.ecommerce.util.StorageUtils;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -18,8 +19,16 @@ public class SplashScreenActivity extends AppCompatActivity {
         new Handler(getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(SplashScreenActivity.this, LoginActivity.class);
-                startActivity(i);
+                // Check if user is already logged in
+                if (StorageUtils.isLoggedIn(SplashScreenActivity.this)) {
+                    // Navigate to MainActivity if logged in
+                    Intent i = new Intent(SplashScreenActivity.this, MainActivity.class);
+                    startActivity(i);
+                } else {
+                    // Navigate to LoginActivity if not logged in
+                    Intent i = new Intent(SplashScreenActivity.this, LoginActivity.class);
+                    startActivity(i);
+                }
                 finish();
             }
         }, 3000);

@@ -1,5 +1,6 @@
 package com.tranbichlien.ecommerce.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -64,9 +65,17 @@ public class SettingsActivity extends AppCompatActivity {
 
         // Logout button click listener
         logoutButton.setOnClickListener(v -> {
-            // Show toast message for logout functionality
-            showToast("Logout functionality");
-            // In a real app, you would clear user session and navigate to login screen
+            // Clear auth data
+            com.tranbichlien.ecommerce.util.StorageUtils.clearAuthData(this);
+
+            // Show toast message for logout
+            showToast("Đăng xuất thành công");
+
+            // Navigate to login screen
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
         });
 
         // Delete account button click listener
