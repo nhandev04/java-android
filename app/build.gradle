@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.tranbichlien.finalproject"
+    namespace = "com.tranbichlien.ecommerce"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.tranbichlien.finalproject"
+        applicationId = "com.tranbichlien.ecommerce"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
