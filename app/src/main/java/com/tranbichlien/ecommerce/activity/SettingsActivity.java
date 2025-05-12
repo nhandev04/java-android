@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,13 +13,15 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 
 import com.tranbichlien.ecommerce.util.StorageUtils;
+import com.tranbichlien.ecommerce.util.ThemeHelper;
 
 import com.tranbichlien.ecommerce.R;
 
 public class SettingsActivity extends AppCompatActivity {
-
     private ImageView backButton;
-    private SwitchCompat notificationsSwitch, darkModeSwitch;
+    private SwitchCompat notificationsSwitch;
+    private RadioGroup themeModeGroup;
+    private RadioButton themeModeSystem, themeModeLight, themeModeDark;
     private Button logoutButton;
 
     @Override
@@ -36,18 +40,36 @@ public class SettingsActivity extends AppCompatActivity {
     private void initViews() {
         backButton = findViewById(R.id.back_button);
         notificationsSwitch = findViewById(R.id.notifications_switch);
-        darkModeSwitch = findViewById(R.id.dark_mode_switch);
         logoutButton = findViewById(R.id.logout_button);
+
+        // Initialize theme mode radio group
+        themeModeGroup = findViewById(R.id.theme_mode_group);
+        themeModeSystem = findViewById(R.id.theme_mode_system);
+        themeModeLight = findViewById(R.id.theme_mode_light);
+        themeModeDark = findViewById(R.id.theme_mode_dark);
 
         // Set switch states based on saved preferences
         notificationsSwitch.setChecked(StorageUtils.areNotificationsEnabled(this));
-        darkModeSwitch.setChecked(StorageUtils.isDarkModeEnabled(this));
+
+        // Set the correct radio button based on the theme mode
+        int currentThemeMode = ThemeHelper.getThemeMode(this);
+        switch (currentThemeMode) {
+            case ThemeHelper.MODE_LIGHT:
+                themeModeLight.setChecked(true);
+                break;
+            case ThemeHelper.MODE_DARK:
+                themeModeDark.setChecked(true);
+                break;
+            case ThemeHelper.MODE_AUTO:
+            default:
+                themeModeSystem.setChecked(true);
+                break;
+        }
     }
 
     private void setupClickListeners() {
         // Back button click listener
-        backButton.setOnClickListener(v -> finish());
-        // Notifications switch listener
+        backButton.setOnClickListener(v -> finish()); // Notifications switch listener
         notificationsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             // Save notification preference to SharedPreferences
             StorageUtils.setNotificationsEnabled(this, isChecked);
@@ -58,23 +80,35 @@ public class SettingsActivity extends AppCompatActivity {
             } else {
                 showToast("Đã tắt tất cả thông báo");
             }
-        }); // Dark mode switch listener
-        darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            // Save dark mode preference to SharedPreferences
-            StorageUtils.setDarkModeEnabled(this, isChecked);
+        });
 
-            // Apply the theme change
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        // Theme mode radio group listener
+        themeModeGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            int themeMode;
+            String themeName;
+            if (checkedId == R.id.theme_mode_light) {
+                themeMode = ThemeHelper.MODE_LIGHT;
+                themeName = "Chế độ sáng";
+                StorageUtils.setDarkModeEnabled(this, false);
+            } else if (checkedId == R.id.theme_mode_dark) {
+                themeMode = ThemeHelper.MODE_DARK;
+                themeName = "Chế độ tối";
+                StorageUtils.setDarkModeEnabled(this, true);
             } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                themeMode = ThemeHelper.MODE_AUTO;
+                themeName = "Theo hệ thống";
             }
 
-            // Show toast message for dark mode setting
-            showToast("Chế độ tối " + (isChecked ? "đã bật" : "đã tắt"));
+            // Apply the theme mode
+            ThemeHelper.setThemeMode(this, themeMode);
 
-            // Recreate the activity to apply theme changes immediately
-            recreate();
+            // Show toast message
+            showToast("Đã chọn " + themeName);
+
+            // Recreate activity to apply changes
+            if (themeMode != ThemeHelper.MODE_AUTO) {
+                recreate();
+            }
         });
 
         // Logout button click listener

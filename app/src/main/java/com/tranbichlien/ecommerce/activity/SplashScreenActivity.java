@@ -8,11 +8,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.tranbichlien.ecommerce.R;
 import com.tranbichlien.ecommerce.util.StorageUtils;
+import com.tranbichlien.ecommerce.util.ThemeHelper;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Apply theme before setContentView
+        ThemeHelper.applyThemeFromPrefs(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 

@@ -52,12 +52,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Apply dark mode setting from preferences
-        if (StorageUtils.isDarkModeEnabled(this)) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
+        // Theme is already applied in SplashScreenActivity,
+        // but ensure it's consistent in case this activity is launched directly
+        com.tranbichlien.ecommerce.util.ThemeHelper.applyThemeFromPrefs(this);
 
         // Create notification channel
         createNotificationChannel();

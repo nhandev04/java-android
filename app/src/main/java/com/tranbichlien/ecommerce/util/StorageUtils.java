@@ -240,6 +240,11 @@ public class StorageUtils {
         SharedPreferences.Editor editor = getPreferences(context).edit();
         editor.putBoolean(DARK_MODE_ENABLED_KEY, enabled);
         editor.apply();
+
+        // Update theme mode in ThemeHelper
+        ThemeHelper.setThemeMode(
+                context,
+                enabled ? ThemeHelper.MODE_DARK : ThemeHelper.MODE_LIGHT);
     }
 
     /**
@@ -250,5 +255,16 @@ public class StorageUtils {
      */
     public static boolean isDarkModeEnabled(Context context) {
         return getPreferences(context).getBoolean(DARK_MODE_ENABLED_KEY, false); // Default is false
+    }
+
+    /**
+     * Get the current theme mode
+     * 
+     * @param context The context
+     * @return The current theme mode (ThemeHelper.MODE_AUTO, MODE_LIGHT, or
+     *         MODE_DARK)
+     */
+    public static int getThemeMode(Context context) {
+        return ThemeHelper.getThemeMode(context);
     }
 }

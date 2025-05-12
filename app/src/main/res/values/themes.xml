@@ -2,7 +2,39 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.ecommerce" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary</item>
+        <item name="colorAccent">@color/primary</item>
+        <item name="colorSecondary">@color/primary</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="android:textColor">@color/mainText</item>
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:itemBackground">@color/backgroundAd</item>
+        <item name="colorSurface">@color/backgroundAd</item>
+        <item name="colorOnSurface">@color/mainText</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorOnBackground">@color/mainText</item>
+          <!-- Additional theme attributes for text colors -->
+        <item name="textColorTitle">@color/mainText</item>
+        <item name="textColorDescription">@color/textAd</item>
+        <item name="textColorHighlight">@color/primary</item>
+        <item name="textColorSecondary">@android:color/darker_gray</item>
+        <item name="colorDivider">@android:color/darker_gray</item>
+        
+        <!-- Custom UI component attributes -->
+        <item name="buttonBackgroundTint">@color/primary</item>
+        <item name="buttonTextColor">@color/white</item>
+        <item name="cardBackgroundColor">@color/backgroundAd</item>
+        <item name="imageOverlayColor">@color/overlay_light</item>
+        <item name="badgeBackgroundColor">@color/primary</item>
+        <item name="promotionBackgroundColor">@color/sale</item>
+        
+        <!-- Status bar and navigation bar theming -->
+        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/background</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
     </style>
 
     <style name="Theme.ecommerce" parent="Base.Theme.ecommerce" />

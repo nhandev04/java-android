@@ -3,18 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="5dp"
+    android:layout_height="wrap_content"    android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
-    android:background="@color/background">
-
-    <androidx.cardview.widget.CardView
+    android:background="?android:colorBackground">    <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="180dp"
         android:layout_height="200dp"
-        app:cardBackgroundColor="@color/backgroundAd"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="0dp"
+        app:cardBackgroundColor="?attr/cardBackgroundColor"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="2dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -44,7 +41,7 @@
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
-            app:cardBackgroundColor="@color/white"
+            app:cardBackgroundColor="?attr/colorSurface"
             app:cardCornerRadius="20dp"
             app:cardElevation="3dp">
 
@@ -55,7 +52,7 @@
                 android:padding="8dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_fav"
-                app:tint="@color/mainText" />
+                app:tint="?attr/colorOnSurface" />
         </androidx.cardview.widget.CardView>
     </androidx.cardview.widget.CardView>
 
@@ -82,7 +79,7 @@
         android:id="@+id/linearlayout5"
         android:layout_width="177dp"
         android:layout_height="wrap_content"
-        android:background="@color/background"
+        android:background="?android:colorBackground"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/productRating_singleProduct">
@@ -95,7 +92,7 @@
             android:fontFamily="@font/metropolis_semibold"
             android:maxLines="1"
             android:text="Apple"
-            android:textColor="@color/textAd"
+            android:textColor="?attr/textColorDescription"
             android:textSize="13sp" />
 
         <TextView
@@ -105,7 +102,7 @@
             android:fontFamily="@font/metropolis_semibold"
             android:maxLines="1"
             android:text="iPhone X"
-            android:textColor="@color/mainText"
+            android:textColor="?attr/textColorTitle"
             android:textSize="15sp" />
 
         <TextView
@@ -116,23 +113,22 @@
             android:fontFamily="@font/metropolis_semibold"
             android:maxLines="1"
             android:text="10,000,000"
-            android:textColor="#F44336"
+            android:textColor="?attr/textColorHighlight"
             android:textSize="13sp" />
 
         <TextView
             android:id="@+id/productDescription_singleProduct"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="?attr/textColorDescription"
             android:text="TextView" />
-    </LinearLayout>
-
-    <LinearLayout
+    </LinearLayout>    <LinearLayout
         android:id="@+id/discount_singleProduct"
         android:layout_width="40dp"
         android:layout_height="20dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/discount_bg"
+        android:background="?attr/promotionBackgroundColor"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -144,7 +140,7 @@
             android:fontFamily="@font/metropolis_semibold"
             android:gravity="center"
             android:text="-10%"
-            android:textColor="@color/white"
+            android:textColor="?attr/buttonTextColor"
             android:textSize="11sp" />
     </LinearLayout>
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Custom theme attributes for text colors -->
+    <attr name="textColorTitle" format="color" />
+    <attr name="textColorDescription" format="color" />
+    <attr name="textColorHighlight" format="color" />
+    <attr name="textColorSecondary" format="color" />
+    <attr name="colorDivider" format="color" />
+    
+    <!-- Custom theme attributes for UI components -->
+    <attr name="buttonBackgroundTint" format="color" />
+    <attr name="buttonTextColor" format="color" />
+    <attr name="cardBackgroundColor" format="color" />
+    <attr name="imageOverlayColor" format="color" />
+    <attr name="badgeBackgroundColor" format="color" />
+    <attr name="promotionBackgroundColor" format="color" />
+</resources>

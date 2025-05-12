@@ -81,32 +81,55 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/darker_gray" />
-
-            <LinearLayout
+                android:background="@android:color/darker_gray" />            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="8dp">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Chế độ tối"
-                    android:textColor="@color/mainText"
-                    android:textSize="16sp" />
+                    android:text="Chế độ giao diện"
+                    android:textColor="?attr/textColorTitle"
+                    android:textSize="16sp"
+                    android:layout_marginTop="12dp" />
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/dark_mode_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <RadioGroup
+                    android:id="@+id/theme_mode_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="8dp">
+
+                    <RadioButton
+                        android:id="@+id/theme_mode_system"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Theo hệ thống"
+                        android:textColor="?attr/textColorDescription" />
+
+                    <RadioButton
+                        android:id="@+id/theme_mode_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Chế độ sáng"
+                        android:textColor="?attr/textColorDescription" />
+
+                    <RadioButton
+                        android:id="@+id/theme_mode_dark"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Chế độ tối"
+                        android:textColor="?attr/textColorDescription" />
+                </RadioGroup>
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/darker_gray" />
+                android:background="?attr/colorDivider" />
 
             <TextView
                 android:layout_width="match_parent"
