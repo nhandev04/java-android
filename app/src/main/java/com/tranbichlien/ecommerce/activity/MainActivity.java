@@ -6,6 +6,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.Manifest;
 import android.app.NotificationChannel;
@@ -31,6 +32,7 @@ import com.tranbichlien.ecommerce.fragment.FavoriteFragment;
 import com.tranbichlien.ecommerce.fragment.HomeFragment;
 import com.tranbichlien.ecommerce.fragment.ProfileFragment;
 import com.tranbichlien.ecommerce.fragment.ShopFragment;
+import com.tranbichlien.ecommerce.util.StorageUtils;
 
 public class MainActivity extends AppCompatActivity {
     FavoriteFragment favoriteFragment;
@@ -49,6 +51,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Apply dark mode setting from preferences
+        if (StorageUtils.isDarkModeEnabled(this)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
 
         // Create notification channel
         createNotificationChannel();
@@ -164,8 +173,14 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Shows a notification with a random product purchase message
+     * if notifications are enabled in settings
      */
     private void showRandomPurchaseNotification() {
+        // Check if notifications are enabled in settings
+        if (!StorageUtils.areNotificationsEnabled(this)) {
+            return; // Don't show notifications if disabled in settings
+        }
+
         if (sampleProducts == null || sampleProducts.isEmpty()) {
             return;
         }

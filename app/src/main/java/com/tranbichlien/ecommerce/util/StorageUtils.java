@@ -16,6 +16,8 @@ public class StorageUtils {
     private static final String PREF_NAME = "app_preferences";
     public static final String CART_ITEMS_KEY = "cart_items";
     private static final String FAVORITE_ITEMS_KEY = "favorite_items";
+    private static final String NOTIFICATIONS_ENABLED_KEY = "notifications_enabled";
+    private static final String DARK_MODE_ENABLED_KEY = "dark_mode_enabled";
 
     // Authentication related keys
     private static final String AUTH_TOKEN_KEY = "auth_token";
@@ -124,7 +126,7 @@ public class StorageUtils {
      * Save the JWT token to SharedPreferences
      * 
      * @param context The context
-     * @param token The JWT token
+     * @param token   The JWT token
      */
     public static void saveAuthToken(Context context, String token) {
         SharedPreferences.Editor editor = getPreferences(context).edit();
@@ -146,7 +148,7 @@ public class StorageUtils {
      * Save the user data to SharedPreferences
      * 
      * @param context The context
-     * @param user The user data
+     * @param user    The user data
      */
     public static void saveUserData(Context context, User user) {
         SharedPreferences.Editor editor = getPreferences(context).edit();
@@ -174,7 +176,7 @@ public class StorageUtils {
     /**
      * Set the login state
      * 
-     * @param context The context
+     * @param context    The context
      * @param isLoggedIn The login state
      */
     public static void setLoggedIn(Context context, boolean isLoggedIn) {
@@ -204,5 +206,49 @@ public class StorageUtils {
         editor.remove(USER_DATA_KEY);
         editor.putBoolean(IS_LOGGED_IN_KEY, false);
         editor.apply();
+    }
+
+    /**
+     * Enable or disable notifications
+     * 
+     * @param context The context
+     * @param enabled Whether notifications should be enabled
+     */
+    public static void setNotificationsEnabled(Context context, boolean enabled) {
+        SharedPreferences.Editor editor = getPreferences(context).edit();
+        editor.putBoolean(NOTIFICATIONS_ENABLED_KEY, enabled);
+        editor.apply();
+    }
+
+    /**
+     * Check if notifications are enabled
+     * 
+     * @param context The context
+     * @return true if notifications are enabled, false otherwise
+     */
+    public static boolean areNotificationsEnabled(Context context) {
+        return getPreferences(context).getBoolean(NOTIFICATIONS_ENABLED_KEY, true); // Default is true
+    }
+
+    /**
+     * Enable or disable dark mode
+     * 
+     * @param context The context
+     * @param enabled Whether dark mode should be enabled
+     */
+    public static void setDarkModeEnabled(Context context, boolean enabled) {
+        SharedPreferences.Editor editor = getPreferences(context).edit();
+        editor.putBoolean(DARK_MODE_ENABLED_KEY, enabled);
+        editor.apply();
+    }
+
+    /**
+     * Check if dark mode is enabled
+     * 
+     * @param context The context
+     * @return true if dark mode is enabled, false otherwise
+     */
+    public static boolean isDarkModeEnabled(Context context) {
+        return getPreferences(context).getBoolean(DARK_MODE_ENABLED_KEY, false); // Default is false
     }
 }

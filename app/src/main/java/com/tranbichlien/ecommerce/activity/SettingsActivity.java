@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
+
+import com.tranbichlien.ecommerce.util.StorageUtils;
 
 import com.tranbichlien.ecommerce.R;
 
@@ -16,7 +18,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private ImageView backButton;
     private SwitchCompat notificationsSwitch, darkModeSwitch;
-    private Button logoutButton, deleteAccountButton;
+    private Button logoutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +29,7 @@ public class SettingsActivity extends AppCompatActivity {
         initViews();
 
         // Set click listeners
-        setupClickListeners(); // For demo purposes, show a toast message
+        setupClickListeners();
         showToast("Màn hình cài đặt đã tải");
     }
 
@@ -36,33 +38,49 @@ public class SettingsActivity extends AppCompatActivity {
         notificationsSwitch = findViewById(R.id.notifications_switch);
         darkModeSwitch = findViewById(R.id.dark_mode_switch);
         logoutButton = findViewById(R.id.logout_button);
-        deleteAccountButton = findViewById(R.id.delete_account_button);
 
-        // Set default values
-        notificationsSwitch.setChecked(true);
-        darkModeSwitch.setChecked(false);
+        // Set switch states based on saved preferences
+        notificationsSwitch.setChecked(StorageUtils.areNotificationsEnabled(this));
+        darkModeSwitch.setChecked(StorageUtils.isDarkModeEnabled(this));
     }
 
     private void setupClickListeners() {
         // Back button click listener
-        backButton.setOnClickListener(v -> finish()); // Notifications switch listener
+        backButton.setOnClickListener(v -> finish());
+        // Notifications switch listener
         notificationsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            // Show toast message for notifications setting
-            showToast("Thông báo " + (isChecked ? "đã bật" : "đã tắt"));
-            // In a real app, you would save this setting to SharedPreferences
-        });
+            // Save notification preference to SharedPreferences
+            StorageUtils.setNotificationsEnabled(this, isChecked);
 
-        // Dark mode switch listener
+            // Show toast message for notifications setting
+            if (isChecked) {
+                showToast("Thông báo voucher đã bật");
+            } else {
+                showToast("Đã tắt tất cả thông báo");
+            }
+        }); // Dark mode switch listener
         darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            // Save dark mode preference to SharedPreferences
+            StorageUtils.setDarkModeEnabled(this, isChecked);
+
+            // Apply the theme change
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+
             // Show toast message for dark mode setting
             showToast("Chế độ tối " + (isChecked ? "đã bật" : "đã tắt"));
-            // In a real app, you would apply the theme change
+
+            // Recreate the activity to apply theme changes immediately
+            recreate();
         });
 
         // Logout button click listener
         logoutButton.setOnClickListener(v -> {
             // Clear auth data
-            com.tranbichlien.ecommerce.util.StorageUtils.clearAuthData(this);
+            StorageUtils.clearAuthData(this);
 
             // Show toast message for logout
             showToast("Đăng xuất thành công");
@@ -72,12 +90,6 @@ public class SettingsActivity extends AppCompatActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
-        }); // Delete account button click listener
-        deleteAccountButton.setOnClickListener(v -> {
-            // Show toast message for delete account functionality
-            showToast("Chức năng xóa tài khoản");
-            // In a real app, you would show a confirmation dialog and then delete the
-            // account
         });
     }
 
