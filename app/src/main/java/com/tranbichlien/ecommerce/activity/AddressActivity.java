@@ -28,10 +28,8 @@ public class AddressActivity extends AppCompatActivity {
         initViews();
 
         // Set click listeners
-        setupClickListeners();
-
-        // For demo purposes, show a toast message
-        showToast("Address screen loaded");
+        setupClickListeners(); // For demo purposes, show a toast message
+        showToast("Màn hình địa chỉ đã tải");
 
         // In a real app, you would load the addresses from a database or API
         // For now, we'll just show a message that there are no addresses
@@ -54,12 +52,10 @@ public class AddressActivity extends AppCompatActivity {
 
     private void setupClickListeners() {
         // Back button click listener
-        backButton.setOnClickListener(v -> finish());
-
-        // Add address button click listener
+        backButton.setOnClickListener(v -> finish()); // Add address button click listener
         addAddressButton.setOnClickListener(v -> {
             // Show toast message for add address functionality
-            showToast("Add new address functionality");
+            showToast("Chức năng thêm địa chỉ mới");
             // In a real app, you would navigate to an add address screen or show a dialog
         });
     }

@@ -1,13 +1,13 @@
 package com.tranbichlien.ecommerce.activity;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.tranbichlien.ecommerce.R;
+import com.tranbichlien.ecommerce.entity.User;
+import com.tranbichlien.ecommerce.util.StorageUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,7 +15,7 @@ public class ProfileConfigActivity extends AppCompatActivity {
 
     private ImageView backButton;
     private EditText nameEditText, emailEditText, phoneEditText;
-    private Button saveButton, changePasswordButton;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +24,9 @@ public class ProfileConfigActivity extends AppCompatActivity {
 
         // Initialize views
         initViews();
+
+        // Load user data
+        loadUserData();
 
         // Set click listeners
         setupClickListeners();
@@ -34,34 +37,38 @@ public class ProfileConfigActivity extends AppCompatActivity {
         nameEditText = findViewById(R.id.name_edit_text);
         emailEditText = findViewById(R.id.email_edit_text);
         phoneEditText = findViewById(R.id.phone_edit_text);
-        saveButton = findViewById(R.id.save_button);
-        changePasswordButton = findViewById(R.id.change_password_button);
 
-        // Set default values
-        nameEditText.setText("Trần Bích Liên");
-        emailEditText.setText("bichlienne@gmail.com");
-        phoneEditText.setText("+84 123 456 789");
+        // Make sure all edit texts are disabled
+        nameEditText.setEnabled(false);
+        emailEditText.setEnabled(false);
+        phoneEditText.setEnabled(false);
+    }
+
+    private void loadUserData() {
+        // Get current user data from storage
+        currentUser = StorageUtils.getUserData(this);
+
+        if (currentUser != null) {
+            // Set user data to UI
+            String fullName = currentUser.getFullName();
+            String email = currentUser.getEmail();
+
+            nameEditText.setText(fullName);
+            emailEditText.setText(email); // Show toast indicating feature is not available
+            showToast("Chỉnh sửa hồ sơ không khả dụng trong phiên bản này");
+        } else {
+            // Set default values if user data is not available
+            nameEditText.setText("");
+            emailEditText.setText("");
+            phoneEditText.setText("");
+
+            showToast("Dữ liệu người dùng không có sẵn");
+        }
     }
 
     private void setupClickListeners() {
         // Back button click listener
         backButton.setOnClickListener(v -> finish());
-
-        // Save button click listener
-        saveButton.setOnClickListener(v -> {
-            // Show toast message for save functionality
-            showToast("Profile information saved");
-            // In a real app, you would save the profile information here
-            // For now, just finish the activity
-            finish();
-        });
-
-        // Change password button click listener
-        changePasswordButton.setOnClickListener(v -> {
-            // Show toast message for change password functionality
-            showToast("Change password functionality");
-            // In a real app, you would navigate to a change password screen
-        });
     }
 
     /**

@@ -85,7 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/metropolis_semibold"
-            android:text="Profile Email"
+            android:text="Email tài khoản"
             android:textColor="@color/textAd"
             android:textSize="14sp"/>
     </LinearLayout>
@@ -146,7 +146,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:fontFamily="@font/metropolis_semibold"
-                        android:text="you have no orders"
+                        android:text="Bạn chưa có đơn hàng nào"
                         android:textColor="@color/textAd"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -245,7 +245,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:fontFamily="@font/metropolis_semibold"
-                        android:text="You Have no cart"
+                        android:text="Bạn chưa có thẻ nào"
                         android:textColor="@color/textAd"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -343,7 +343,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:fontFamily="@font/metropolis_semibold"
-                        android:text="Thông báo, mật khẩu"
+                        android:text="Thông báo, Chế độ tối"
                         android:textColor="@color/textAd"
                         android:textSize="12sp" />
                 </LinearLayout>

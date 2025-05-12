@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Settings"
+            android:text="Cài đặt"
             android:textColor="@color/mainText"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -54,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="App Settings"
+                android:text="Cài đặt ứng dụng"
                 android:textColor="@color/mainText"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -70,12 +70,12 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Notifications"
+                    android:text="Thông báo"
                     android:textColor="@color/mainText"
                     android:textSize="16sp" />
 
                 <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/notifications_switch"
+                    android:id="@+id/notifications_switch"  
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -95,7 +95,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Dark Mode"
+                    android:text="Chế độ tối"
                     android:textColor="@color/mainText"
                     android:textSize="16sp" />
 
@@ -114,7 +114,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:text="Account"
+                android:text="Tài khoản"
                 android:textColor="@color/mainText"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -125,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/btn_bg"
-                android:text="Logout"
+                android:text="Đăng xuất"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
@@ -136,7 +136,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:background="@android:color/holo_red_light"
-                android:text="Delete Account"
+                android:text="Xóa tài khoản"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />

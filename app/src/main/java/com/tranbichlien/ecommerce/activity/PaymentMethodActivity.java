@@ -28,10 +28,8 @@ public class PaymentMethodActivity extends AppCompatActivity {
         initViews();
 
         // Set click listeners
-        setupClickListeners();
-
-        // For demo purposes, show a toast message
-        showToast("Payment Methods screen loaded");
+        setupClickListeners(); // For demo purposes, show a toast message
+        showToast("Màn hình phương thức thanh toán đã tải");
 
         // In a real app, you would load the payment methods from a database or API
         // For now, we'll just show a message that there are no payment methods
@@ -54,12 +52,10 @@ public class PaymentMethodActivity extends AppCompatActivity {
 
     private void setupClickListeners() {
         // Back button click listener
-        backButton.setOnClickListener(v -> finish());
-
-        // Add payment method button click listener
+        backButton.setOnClickListener(v -> finish()); // Add payment method button click listener
         addPaymentMethodButton.setOnClickListener(v -> {
             // Show toast message for add payment method functionality
-            showToast("Add new payment method functionality");
+            showToast("Chức năng thêm phương thức thanh toán mới");
             // In a real app, you would navigate to an add payment method screen or show a
             // dialog
         });

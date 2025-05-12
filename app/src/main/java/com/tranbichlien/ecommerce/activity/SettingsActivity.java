@@ -27,10 +27,8 @@ public class SettingsActivity extends AppCompatActivity {
         initViews();
 
         // Set click listeners
-        setupClickListeners();
-
-        // For demo purposes, show a toast message
-        showToast("Settings screen loaded");
+        setupClickListeners(); // For demo purposes, show a toast message
+        showToast("Màn hình cài đặt đã tải");
     }
 
     private void initViews() {
@@ -47,19 +45,17 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void setupClickListeners() {
         // Back button click listener
-        backButton.setOnClickListener(v -> finish());
-
-        // Notifications switch listener
+        backButton.setOnClickListener(v -> finish()); // Notifications switch listener
         notificationsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             // Show toast message for notifications setting
-            showToast("Notifications " + (isChecked ? "enabled" : "disabled"));
+            showToast("Thông báo " + (isChecked ? "đã bật" : "đã tắt"));
             // In a real app, you would save this setting to SharedPreferences
         });
 
         // Dark mode switch listener
         darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             // Show toast message for dark mode setting
-            showToast("Dark mode " + (isChecked ? "enabled" : "disabled"));
+            showToast("Chế độ tối " + (isChecked ? "đã bật" : "đã tắt"));
             // In a real app, you would apply the theme change
         });
 
@@ -76,12 +72,10 @@ public class SettingsActivity extends AppCompatActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
-        });
-
-        // Delete account button click listener
+        }); // Delete account button click listener
         deleteAccountButton.setOnClickListener(v -> {
             // Show toast message for delete account functionality
-            showToast("Delete account functionality");
+            showToast("Chức năng xóa tài khoản");
             // In a real app, you would show a confirmation dialog and then delete the
             // account
         });

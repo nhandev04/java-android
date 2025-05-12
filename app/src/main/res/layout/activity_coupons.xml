@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="My Coupons"
+            android:text="Mã giảm giá"
             android:textColor="@color/mainText"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -50,7 +50,7 @@
         android:id="@+id/empty_coupons_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="You have no coupons"
+        android:text="Bạn chưa có mã giảm giá nào"
         android:textColor="@color/mainText"
         android:textSize="16sp"
         android:visibility="gone"

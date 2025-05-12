@@ -26,10 +26,8 @@ public class CouponsActivity extends AppCompatActivity {
         initViews();
 
         // Set click listeners
-        setupClickListeners();
-
-        // For demo purposes, show a toast message
-        showToast("Coupons screen loaded");
+        setupClickListeners(); // For demo purposes, show a toast message
+        showToast("Màn hình mã giảm giá đã tải");
 
         // In a real app, you would load the coupons from a database or API
         // For now, we'll just show a message that there are no coupons

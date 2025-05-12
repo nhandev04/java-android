@@ -20,14 +20,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_menu_close_clear_cancel"
-            android:contentDescription="Back" />
+            android:contentDescription="Quay lại" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Profile Settings"
+            android:text="Cài đặt hồ sơ"
             android:textColor="@color/mainText"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
-                android:text="Change Photo"
+                android:text="Đổi ảnh"
                 android:textColor="@color/mainText"
                 android:textSize="14sp" />
 
@@ -71,21 +71,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Full Name"
+                android:text="Họ và tên"
                 android:textColor="@color/mainText"
-                android:textSize="14sp" />
-
+                android:textSize="14sp" />            
+                
             <EditText
                 android:id="@+id/name_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@android:color/white"
-                android:hint="Enter your full name"
+                android:hint="Nhập họ và tên của bạn"
                 android:inputType="textPersonName"
                 android:padding="12dp"
                 android:textColor="@color/mainText"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:enabled="false" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -93,25 +94,26 @@
                 android:layout_marginTop="16dp"
                 android:text="Email"
                 android:textColor="@color/mainText"
-                android:textSize="14sp" />
-
+                android:textSize="14sp" />            
+                
             <EditText
                 android:id="@+id/email_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@android:color/white"
-                android:hint="Enter your email"
+                android:hint="Nhập email của bạn"
                 android:inputType="textEmailAddress"
                 android:padding="12dp"
                 android:textColor="@color/mainText"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:enabled="false" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Phone Number"
+                android:text="Số điện thoại"
                 android:textColor="@color/mainText"
                 android:textSize="14sp" />
 
@@ -121,34 +123,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@android:color/white"
-                android:hint="Enter your phone number"
+                android:hint="Nhập số điện thoại của bạn"
                 android:inputType="phone"
-                android:padding="12dp"
+                android:padding="12dp"                
                 android:textColor="@color/mainText"
-                android:textSize="16sp" />
-
-            <Button
-                android:id="@+id/change_password_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:background="@drawable/btn_bg"
-                android:text="Change Password"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                android:textSize="16sp" />
-
-            <Button
-                android:id="@+id/save_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="24dp"
-                android:background="@drawable/btn_bg"
-                android:text="Save Changes"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                android:textSize="16sp" />
+                android:textSize="16sp" 
+                android:enabled="false" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
